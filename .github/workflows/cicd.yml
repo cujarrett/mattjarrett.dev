@@ -1,4 +1,4 @@
-name: Docker
+name: CI
 
 on:
   push:
@@ -9,7 +9,32 @@ on:
       - main
 
 jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
+
   build:
+    needs: lint-and-test
     runs-on: ubuntu-latest
     permissions:
       contents: read
