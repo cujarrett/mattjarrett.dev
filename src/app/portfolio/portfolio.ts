@@ -1,6 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 
+function shuffle<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 @Component({
   selector: 'app-portfolio',
   imports: [NgOptimizedImage],
@@ -9,11 +18,11 @@ import { NgOptimizedImage } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Portfolio {
-  protected readonly projects = [
+  protected readonly projects = shuffle([
     {
       title: 'js-pollock',
       description: 'Single Page App for computer generated art inspired by Jackson Pollock',
-      url: 'https://jspollock.art',
+      url: 'https://jspollock.mattjarrett.dev',
       img: 'portfolio/js-pollock.png',
     },
     {
@@ -23,10 +32,10 @@ export class Portfolio {
       img: 'portfolio/destiny-insights.png',
     },
     {
-      title: 'resume-api',
-      description: 'Open source REST API for my JSON-based standard format resume',
-      url: 'https://dev.to/cujarrett/how-i-built-a-resume-api-w-go-terraform-and-aws-371o',
-      img: 'portfolio/resume-api.png',
+      title: 'homelab',
+      description: 'Self-hosted Kubernetes cluster running on Raspberry Pis',
+      url: 'https://blog.mattjarrett.dev/homelab/',
+      img: 'portfolio/homelab.png',
     },
     {
       title: 'ES6 in Six Hours',
@@ -40,5 +49,11 @@ export class Portfolio {
       url: 'https://github.com/cujarrett/markdown-tables',
       img: 'portfolio/markdown-tables.png',
     },
-  ];
+    {
+      title: 'my-vinyl',
+      description: 'Web app for tracking your vinyl record collection',
+      url: 'https://myvinyl.mattjarrett.dev',
+      img: 'portfolio/my-vinyl.png',
+    },
+  ]);
 }
