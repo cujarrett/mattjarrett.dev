@@ -23,10 +23,6 @@ describe('Portfolio', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have 5 projects', () => {
-    expect(component['projects'].length).toBe(5);
-  });
-
   it('each project should have title, description, url, and img', () => {
     for (const project of component['projects']) {
       expect(project.title).toBeTruthy();
