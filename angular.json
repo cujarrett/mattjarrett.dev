@@ -98,13 +98,7 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "tsconfig.spec.json",
-            "runner": "karma",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ]
+            "runner": "karma"
           }
         }
       }
