@@ -21,13 +21,13 @@ export class Portfolio {
   protected readonly projects = shuffle([
     {
       title: 'js-pollock',
-      description: 'Single Page App for computer generated art inspired by Jackson Pollock',
+      description: 'Can computers make art? My daughter asked, so we found out',
       url: 'https://jspollock.mattjarrett.dev',
       img: 'portfolio/js-pollock.png',
     },
     {
       title: 'Destiny Insights',
-      description: 'Node Twitter bot and web app for Destiny the game',
+      description: 'Node Twitter bot w/ 70k users',
       url: 'https://twitter.com/destinyinsights',
       img: 'portfolio/destiny-insights.png',
     },
@@ -51,7 +51,7 @@ export class Portfolio {
     },
     {
       title: 'my-vinyl',
-      description: 'Web app for tracking your vinyl record collection',
+      description: 'Discogs vinyl collection search, defaults to my collection',
       url: 'https://myvinyl.mattjarrett.dev',
       img: 'portfolio/my-vinyl.png',
     },
