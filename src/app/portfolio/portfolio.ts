@@ -35,7 +35,7 @@ export class Portfolio {
       title: 'Homelab',
       description: 'Bookshelf Kubernetes cluster',
       url: 'https://blog.mattjarrett.dev/homelab/',
-      img: 'portfolio/homelab.png',
+      img: 'portfolio/k3s-homelab.png',
     },
     {
       title: 'ES6 in Six Hours',
