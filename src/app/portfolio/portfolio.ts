@@ -32,8 +32,8 @@ export class Portfolio {
       img: 'portfolio/destiny-insights.png',
     },
     {
-      title: 'homelab',
-      description: 'Self-hosted Kubernetes cluster running on Raspberry Pis',
+      title: 'Homelab',
+      description: 'Bookshelf Kubernetes cluster',
       url: 'https://blog.mattjarrett.dev/homelab/',
       img: 'portfolio/homelab.png',
     },
@@ -54,6 +54,18 @@ export class Portfolio {
       description: 'Discogs vinyl collection search, defaults to my collection',
       url: 'https://myvinyl.mattjarrett.dev',
       img: 'portfolio/my-vinyl.png',
+    },
+    {
+      title: 'I Pub Sub\'d my Sump Pump',
+      description: '',
+      url: 'https://blog.mattjarrett.dev/i-pub-subd-my-sump-pump/',
+      img: 'portfolio/pub-sub-sump-pump.png',
+    },
+    {
+      title: 'Velvet Rope',
+      description: 'About npm supply chain age gate — blocks packages published less than N days ago',
+      url: 'https://github.com/cujarrett/velvet-rope',
+      img: 'portfolio/velvet-rope.png',
     },
   ]);
 }
