@@ -57,7 +57,7 @@ export class Portfolio {
     },
     {
       title: 'I Pub Sub\'d my Sump Pump',
-      description: '',
+      description: 'Power of platform engineering',
       url: 'https://blog.mattjarrett.dev/i-pub-subd-my-sump-pump/',
       img: 'portfolio/pub-sub-sump-pump.png',
     },

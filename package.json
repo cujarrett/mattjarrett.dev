@@ -6,8 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint"
+    "test": "ng test --watch=false --browsers=ChromeHeadless",
+    "lint": "ng lint",
+    "ci": "npm run lint && npm run test"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
