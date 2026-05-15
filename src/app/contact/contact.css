@@ -3,8 +3,10 @@
 }
 
 .contact {
-  padding: 60px 0 20px;
+  padding: 60px 2rem 20px;
   text-align: center;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
 }
 
 .section-header {

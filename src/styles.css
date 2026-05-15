@@ -13,6 +13,7 @@
   --about-bg: #292c33;
   --font-sans: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   --font-serif: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
+  --max-content-width: 1750px;
 }
 
 html {
