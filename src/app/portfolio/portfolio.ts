@@ -67,5 +67,11 @@ export class Portfolio {
       url: 'https://github.com/cujarrett/velvet-rope',
       img: 'portfolio/velvet-rope.png',
     },
+    {
+      title: 'My Bookshelf Developer Platform',
+      description: 'Learning Platform Engineering',
+      url: 'https://blog.mattjarrett.dev/platform/',
+      img: 'portfolio/platform.png',
+    },
   ]);
 }
