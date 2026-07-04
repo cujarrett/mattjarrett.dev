@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Reveal } from '../shared/reveal';
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { Reveal } from '../shared/reveal'
 
 @Component({
   selector: 'app-contact',

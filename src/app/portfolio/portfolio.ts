@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
-import { Reveal } from '../shared/reveal';
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { NgOptimizedImage } from '@angular/common'
+import { Reveal } from '../shared/reveal'
 
 function shuffle<T>(array: T[]): T[] {
-  const arr = [...array];
+  const arr = [...array]
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
   }
-  return arr;
+  return arr
 }
 
 @Component({
@@ -57,14 +57,15 @@ export class Portfolio {
       img: 'portfolio/my-vinyl.png',
     },
     {
-      title: 'I Pub Sub\'d my Sump Pump',
+      title: "I Pub Sub'd my Sump Pump",
       description: 'Power of platform engineering',
       url: 'https://blog.mattjarrett.dev/i-pub-subd-my-sump-pump/',
       img: 'portfolio/pub-sub-sump-pump.png',
     },
     {
       title: 'Velvet Rope',
-      description: 'About npm supply chain age gate — blocks packages published less than N days ago',
+      description:
+        'About npm supply chain age gate — blocks packages published less than N days ago',
       url: 'https://github.com/cujarrett/velvet-rope',
       img: 'portfolio/velvet-rope.png',
     },
@@ -74,5 +75,5 @@ export class Portfolio {
       url: 'https://blog.mattjarrett.dev/platform/',
       img: 'portfolio/platform.png',
     },
-  ]);
+  ])
 }

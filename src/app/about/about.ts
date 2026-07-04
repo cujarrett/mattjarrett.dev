@@ -1,11 +1,19 @@
-import { ChangeDetectionStrategy, Component, signal, inject, PLATFORM_ID, afterNextRender, ElementRef } from '@angular/core';
-import { isPlatformBrowser, DOCUMENT, NgOptimizedImage } from '@angular/common';
-import { Reveal } from '../shared/reveal';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  inject,
+  PLATFORM_ID,
+  afterNextRender,
+  ElementRef,
+} from '@angular/core'
+import { isPlatformBrowser, DOCUMENT, NgOptimizedImage } from '@angular/common'
+import { Reveal } from '../shared/reveal'
 
 interface Skill {
-  name: string;
-  percent: number;
-  color: string;
+  name: string
+  percent: number
+  color: string
 }
 
 @Component({
@@ -16,11 +24,11 @@ interface Skill {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class About {
-  protected readonly barsAnimated = signal(false);
+  protected readonly barsAnimated = signal(false)
 
-  private readonly platformId = inject(PLATFORM_ID);
-  private readonly document = inject(DOCUMENT);
-  private readonly elementRef = inject(ElementRef);
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly document = inject(DOCUMENT)
+  private readonly elementRef = inject(ElementRef)
 
   protected readonly certifications = [
     {
@@ -38,7 +46,7 @@ export class About {
       url: 'https://www.credly.com/badges/5af85d36-e997-4591-b745-fec9283ff656',
       img: 'hashicorp-certified-terraform-associate.png',
     },
-  ];
+  ]
 
   protected readonly experience = [
     {
@@ -65,7 +73,7 @@ export class About {
       description:
         'Designed and implemented an automated infrastructure solution offering a complete stand up and tear down process accomplished in minutes compared to days. Taught Java in Enterprise Java classes to spread knowledge. Active member of the college recruitment team including creation of campus events, hacks, and interviews. Mentored many college interns through a successful internships resulting in all receiving and accepting full time positions. Designed and implemented multiple solutions in Java.',
     },
-  ];
+  ]
 
   protected readonly skills: Skill[] = [
     { name: 'AWS', percent: 50, color: '#f44336' },
@@ -75,30 +83,30 @@ export class About {
     { name: 'Kubernetes', percent: 80, color: '#009688' },
     { name: 'Terraform', percent: 75, color: '#8bc34a' },
     { name: 'Python', percent: 40, color: '#ffeb3b' },
-  ];
+  ]
 
   constructor() {
     afterNextRender(() => {
       if (isPlatformBrowser(this.platformId)) {
-        const win = this.document.defaultView;
+        const win = this.document.defaultView
         const checkScroll = () => {
-          if (this.barsAnimated()) return;
-          const skillsEl = this.elementRef.nativeElement.querySelector('#skills-graph');
+          if (this.barsAnimated()) return
+          const skillsEl = this.elementRef.nativeElement.querySelector('#skills-graph')
           if (skillsEl) {
-            const rect = skillsEl.getBoundingClientRect();
-            const viewHeight = win?.innerHeight ?? 0;
+            const rect = skillsEl.getBoundingClientRect()
+            const viewHeight = win?.innerHeight ?? 0
             if (rect.top < viewHeight && rect.bottom > 0) {
               // Defer by one frame so the browser commits the 0% state first,
               // giving the CSS transition a "from" value to animate from.
               win?.requestAnimationFrame(() => {
-                this.barsAnimated.set(true);
-              });
+                this.barsAnimated.set(true)
+              })
             }
           }
-        };
-        win?.addEventListener('scroll', checkScroll);
-        checkScroll();
+        }
+        win?.addEventListener('scroll', checkScroll)
+        checkScroll()
       }
-    });
+    })
   }
 }
