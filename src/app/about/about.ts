@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, inject, PLATFORM_ID, afterNextRender, ElementRef } from '@angular/core';
 import { isPlatformBrowser, DOCUMENT, NgOptimizedImage } from '@angular/common';
+import { Reveal } from '../shared/reveal';
 
 interface Skill {
   name: string;
@@ -9,7 +10,7 @@ interface Skill {
 
 @Component({
   selector: 'app-about',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, Reveal],
   templateUrl: './about.html',
   styleUrl: './about.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,12 +1,12 @@
 <section id="about" class="about">
-  <div class="section-header">
+  <div class="section-header" appReveal>
     <h1 class="section-heading">about me</h1>
     <hr class="light" />
   </div>
 
   <div class="about-columns">
     <div class="left-col">
-      <div class="about-block">
+      <div class="about-block" appReveal>
         <h2 class="text-light-faded">Background</h2>
         <p class="text-faded">I'm a passionate and detail oriented Senior Software
           Engineer based in Illinois. Experienced leader where I enjoy
@@ -17,7 +17,7 @@
           family and photography.</p>
       </div>
 
-      <div class="about-block">
+      <div class="about-block" appReveal>
         <h2 class="text-light-faded">Work Experience</h2>
         @for (job of experience; track job.period) {
           <h3 class="text-faded-more">{{ job.title }} {{ job.period }}</h3>
@@ -27,7 +27,7 @@
     </div>
 
     <div class="right-col">
-      <div class="about-block">
+      <div class="about-block" appReveal>
         <h2 class="text-light-faded">Certifications</h2>
         <div class="certs">
           @for (cert of certifications; track cert.url) {
@@ -58,7 +58,7 @@
           </div>
         }
       </div>
-      <div class="more-about-info">
+      <div class="more-about-info" appReveal>
         <a href="https://www.linkedin.com/in/matt-jarrett-303a75144/" target="_blank" rel="noopener noreferrer">More on LinkedIn</a>
         <br />
         <a href="https://drive.google.com/file/d/1mLQSoMxdBHaPEnWssb6OrsQUy_PcRvIh/view?usp=sharing" target="_blank" rel="noopener noreferrer">My Resume</a>

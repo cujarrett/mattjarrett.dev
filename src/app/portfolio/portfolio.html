@@ -1,11 +1,11 @@
 <section id="portfolio">
-  <div class="section-header">
+  <div class="section-header" appReveal>
     <h1 class="section-heading-dark">work I'm proud of</h1>
     <hr class="dark" />
   </div>
   <div class="portfolio-grid">
     @for (project of projects; track project.url) {
-      <div class="portfolio-item">
+      <div class="portfolio-item" appReveal [revealDelay]="($index % 3) * 100">
         <a [href]="project.url" class="portfolio-box" target="_blank" rel="noopener noreferrer">
           <img [ngSrc]="project.img" [alt]="project.title" width="650" height="400" priority />
           <div class="portfolio-box-caption">

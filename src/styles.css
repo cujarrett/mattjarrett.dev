@@ -81,6 +81,19 @@ section {
   padding: 100px 0;
 }
 
+/* Scroll-in reveals — the hidden state is added by the Reveal directive
+   only when JS + IntersectionObserver are available. */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
 :focus-visible {
   outline: 2px solid var(--theme-primary);
   outline-offset: 2px;

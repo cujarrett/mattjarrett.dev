@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { Reveal } from '../shared/reveal';
 
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
@@ -12,7 +13,7 @@ function shuffle<T>(array: T[]): T[] {
 
 @Component({
   selector: 'app-portfolio',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, Reveal],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
