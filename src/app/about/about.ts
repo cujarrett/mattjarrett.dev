@@ -81,7 +81,7 @@ export class About {
     { name: 'Angular', percent: 15, color: '#3f51b5' },
     { name: 'Go', percent: 10, color: '#03a9f4' },
     { name: 'Kubernetes', percent: 65, color: '#009688' },
-    { name: 'Terraform', percent: 65, color: '#8bc34a' },
+    { name: 'Terraform', percent: 60, color: '#8bc34a' },
     { name: 'Python', percent: 35, color: '#ffeb3b' },
   ]
 
