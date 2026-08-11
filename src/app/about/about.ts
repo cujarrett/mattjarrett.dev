@@ -79,10 +79,10 @@ export class About {
     { name: 'AWS', percent: 50, color: '#f44336' },
     { name: 'JavaScript', percent: 90, color: '#9c27b0' },
     { name: 'Angular', percent: 15, color: '#3f51b5' },
-    { name: 'Go', percent: 30, color: '#03a9f4' },
-    { name: 'Kubernetes', percent: 80, color: '#009688' },
-    { name: 'Terraform', percent: 75, color: '#8bc34a' },
-    { name: 'Python', percent: 40, color: '#ffeb3b' },
+    { name: 'Go', percent: 10, color: '#03a9f4' },
+    { name: 'Kubernetes', percent: 65, color: '#009688' },
+    { name: 'Terraform', percent: 65, color: '#8bc34a' },
+    { name: 'Python', percent: 35, color: '#ffeb3b' },
   ]
 
   constructor() {
