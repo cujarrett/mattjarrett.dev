@@ -1,6 +1,6 @@
 # mattjarrett.dev
 
-Personal portfolio site built with Angular 20+ (signals, standalone components, OnPush), containerized with Docker (nginx), and deployed to a self-hosted Kubernetes cluster (k3s on Raspberry Pi). There is no backend — the app is a static SPA served by nginx.
+Personal portfolio site built with Angular 20+ (signals, standalone components, OnPush), containerized with Docker (nginx), and deployed to a self-hosted Kubernetes cluster (k3s on Raspberry Pi). There is no backend - the app is a static SPA served by nginx.
 
 - **Namespace**: `mattjarrett-dev`
 - **nginx config**: `nginx.conf` at repo root, mounted into the container
@@ -10,18 +10,18 @@ Personal portfolio site built with Angular 20+ (signals, standalone components, 
 
 | File | Purpose |
 |------|---------|
-| `nginx.conf` | nginx server config — routing, security headers, scanner blocks |
+| `nginx.conf` | nginx server config - routing, security headers, scanner blocks |
 | `Dockerfile` | Multi-stage build: Angular CLI → nginx |
 | `src/app/` | Angular components (hero, about, portfolio, contact, nav) |
 
 ## Rules
 
 - **Never run `git commit`, `git push`, or any git command that writes to or modifies repository history or remotes.** If a task requires committing or pushing, stop and tell the user to run the git command manually.
-- **When debugging, always list every command used** — show the command, what it does, and why — so the user can learn the debugging workflow. Do this inline as you debug, not as a summary at the end.
+- **When debugging, always list every command used** - show the command, what it does, and why - so the user can learn the debugging workflow. Do this inline as you debug, not as a summary at the end.
 
 ### Pre-commit safety check
 
-Before telling the user to commit, always run `/security-review`. It reviews the pending changes on the current branch for security issues. Once it confirms the changes are safe, offer the user a suggested commit message — do not run `git commit` yourself.
+Before telling the user to commit, always run `/security-review`. It reviews the pending changes on the current branch for security issues. Once it confirms the changes are safe, offer the user a suggested commit message - do not run `git commit` yourself.
 
 ## Build & Run
 

@@ -87,7 +87,7 @@ section {
   padding: 100px 0;
 }
 
-/* Scroll-in reveals — the hidden state is added by the Reveal directive
+/* Scroll-in reveals - the hidden state is added by the Reveal directive
    only when JS + IntersectionObserver are available. */
 .reveal {
   opacity: 0;

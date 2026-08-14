@@ -65,7 +65,7 @@ export class Portfolio {
     {
       title: 'Velvet Rope',
       description:
-        'About npm supply chain age gate — blocks packages published less than N days ago',
+        'About npm supply chain age gate - blocks packages published less than N days ago',
       url: 'https://github.com/cujarrett/velvet-rope',
       img: 'portfolio/velvet-rope.png',
     },
