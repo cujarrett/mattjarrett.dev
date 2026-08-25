@@ -22,7 +22,7 @@ describe('About', () => {
   })
 
   it('should have barsAnimated as false by default', () => {
-    expect(component['barsAnimated']()).toBeFalse()
+    expect(component['barsAnimated']()).toBe(false)
   })
 
   it('should have 3 certifications', () => {
