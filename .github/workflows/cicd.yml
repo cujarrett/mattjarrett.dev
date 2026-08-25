@@ -34,7 +34,7 @@ jobs:
         run: npm run lint
 
       - name: Test
-        run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
+        run: npm test
 
   build:
     needs: lint-and-test
