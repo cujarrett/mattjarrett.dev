@@ -63,13 +63,6 @@ export class Portfolio {
       img: 'portfolio/pub-sub-sump-pump.png',
     },
     {
-      title: 'Velvet Rope',
-      description:
-        'About npm supply chain age gate - blocks packages published less than N days ago',
-      url: 'https://github.com/cujarrett/velvet-rope',
-      img: 'portfolio/velvet-rope.png',
-    },
-    {
       title: 'My Bookshelf Developer Platform',
       description: 'Learning Platform Engineering',
       url: 'https://blog.mattjarrett.dev/platform/',
