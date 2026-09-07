@@ -76,7 +76,7 @@ export class Portfolio {
     },
     {
       title: 'Go Template in YAML',
-      description: 'YAML sees {{ }} and shrugs. This VS Code extension colours it in.',
+      description: 'YAML sees {{ }} and shrugs. This VS Code extension colors it in.',
       url: 'https://marketplace.visualstudio.com/items?itemName=cujarrett.gotemplate-yaml',
       img: 'portfolio/gotemplate-yaml.png',
     },
