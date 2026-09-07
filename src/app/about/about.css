@@ -179,6 +179,12 @@ hr.light {
 
 /* Responsive */
 @media (max-width: 1026px) {
+  /* Without this the two 100%-width children stay side by side and squeeze
+     into a pair of narrow strips instead of stacking. */
+  .about-columns {
+    flex-direction: column;
+  }
+
   .left-col {
     width: 100%;
   }
