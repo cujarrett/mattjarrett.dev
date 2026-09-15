@@ -17,6 +17,7 @@ Personal portfolio site built with Angular 20+ (signals, standalone components, 
 ## Rules
 
 - **Never run `git commit`, `git push`, or any git command that writes to or modifies repository history or remotes.** If a task requires committing or pushing, stop and tell the user to run the git command manually.
+- **Never add a `Co-Authored-By` trailer or a "Generated with Claude Code" line** to commit messages or PR descriptions, including in suggested commit messages. Commits are authored by the user alone.
 - **When debugging, always list every command used** - show the command, what it does, and why - so the user can learn the debugging workflow. Do this inline as you debug, not as a summary at the end.
 - **Cheapest rung that works.** Before writing code go down the ladder and stop at the first rung that solves it - skip the feature, reuse code already here, standard library, native platform feature, a dependency already installed, one line, then build the minimum.
 
