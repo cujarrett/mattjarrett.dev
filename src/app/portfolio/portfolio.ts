@@ -80,5 +80,11 @@ export class Portfolio {
       url: 'https://marketplace.visualstudio.com/items?itemName=cujarrett.gotemplate-yaml',
       img: 'portfolio/gotemplate-yaml.png',
     },
+    {
+      title: 'Automating Dependency Decisions',
+      description: 'I automated dependency updates.',
+      url: 'https://blog.mattjarrett.dev/automerge/',
+      img: 'portfolio/automerge.png',
+    },
   ])
 }
