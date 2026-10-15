@@ -7,6 +7,6 @@ COPY . .
 RUN npm run build
 
 # Stage 2 - serve
-FROM nginx:alpine
+FROM nginx:1.31-alpine
 COPY --from=build /app/dist/mattjarrett-dev/browser /usr/share/nginx/html
 EXPOSE 80
