@@ -105,13 +105,13 @@ hr.light {
   padding-left: 16px;
 }
 
-.cert-name h4 a {
+.cert-name h3 a {
   color: #fff;
   font-size: 13px;
   line-height: 1.4;
 }
 
-.cert-name h4 a:hover {
+.cert-name h3 a:hover {
   color: var(--theme-primary);
 }
 

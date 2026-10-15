@@ -29,7 +29,8 @@ header {
   text-align: right;
 }
 
-.header-content-inner h3 {
+.header-content-inner h2 {
+  font-size: 1.17em;
   margin-top: 0;
   margin-bottom: 10px;
   font-weight: 400;

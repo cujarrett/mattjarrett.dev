@@ -33,13 +33,13 @@
 }
 
 .navbar.scrolled .nav-brand {
-  color: var(--theme-primary);
+  color: var(--theme-primary-dark);
   font-size: 14px;
 }
 
 .navbar.scrolled .nav-brand:hover,
 .navbar.scrolled .nav-brand:focus {
-  color: var(--theme-primary-dark);
+  color: var(--theme-primary);
 }
 
 .nav-toggle {
@@ -118,7 +118,7 @@
   }
 
   .nav-brand {
-    color: var(--theme-primary);
+    color: var(--theme-primary-dark);
   }
 
   .nav-links {
