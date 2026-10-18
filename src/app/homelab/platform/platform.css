@@ -181,11 +181,15 @@ app-kind-icon {
 }
 
 .steps {
-  flex: 1;
   position: relative;
   display: grid;
-  align-content: space-between;
   gap: 12px;
+}
+
+/* A full build spreads to the height of the resource list. A short one stays packed. */
+.steps.fill {
+  flex: 1;
+  align-content: space-between;
 }
 
 .step,

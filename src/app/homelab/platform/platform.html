@@ -62,7 +62,7 @@
 
         @if (build(); as b) {
           <div class="race">
-            <div class="steps">
+            <div class="steps" [class.fill]="b.steps.length >= 6">
               @if (b.playing) {
                 <div class="overlay" aria-hidden="true">
                   <i class="now" [style.left.%]="b.now"></i>
