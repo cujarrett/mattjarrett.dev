@@ -44,7 +44,7 @@ export class Cluster {
   private readonly document = inject(DOCUMENT)
   private readonly host = inject(ElementRef)
 
-  protected readonly ranges: ClusterRange[] = ['1d', '1w', '1m']
+  protected readonly ranges: ClusterRange[] = ['1d', '7d', '30d']
   protected readonly range = signal<ClusterRange>('1d')
   protected readonly data = signal<ClusterStats | null>(null)
   protected readonly failed = signal(false)
@@ -144,8 +144,8 @@ export class Cluster {
     const observer = new IntersectionObserver(async (entries) => {
       if (!entries.some((e) => e.isIntersecting)) return
       observer.disconnect()
-      await this.load('1w')
-      await this.load('1m')
+      await this.load('7d')
+      await this.load('30d')
     })
     observer.observe(host)
   }

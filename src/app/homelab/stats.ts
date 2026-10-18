@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 
-export type ClusterRange = '1d' | '1w' | '1m'
+export type ClusterRange = '1d' | '7d' | '30d'
 
 export interface ClusterStats {
   range: ClusterRange
