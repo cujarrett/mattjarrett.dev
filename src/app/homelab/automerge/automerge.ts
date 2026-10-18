@@ -78,8 +78,9 @@ export class Automerge {
     afterNextRender(async () => {
       if (!isPlatformBrowser(this.platformId)) return
       try {
-        this.data.set(await this.stats.automerge())
-        this.updatedAt.set(Date.now())
+        const { data, at } = await this.stats.automerge()
+        this.data.set(data)
+        this.updatedAt.set(at)
       } catch {
         this.failed.set(true)
         return

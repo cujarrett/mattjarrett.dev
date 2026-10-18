@@ -77,6 +77,24 @@
   color: var(--hl-ink-2);
 }
 
+.big span {
+  text-wrap: balance;
+}
+
+.date {
+  font-style: normal;
+  white-space: nowrap;
+}
+
+.big .hand {
+  margin-top: 24px;
+}
+
+.big .hand b {
+  font-size: clamp(32px, 4vw, 44px);
+  color: var(--hand);
+}
+
 .right {
   display: flex;
   flex-direction: column;

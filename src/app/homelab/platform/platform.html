@@ -2,8 +2,16 @@
   <div class="inner">
     <div class="section-header" appReveal>
       <h1 id="platform-title" class="section-heading">
-        <a href="https://blog.mattjarrett.dev/platform/" target="_blank" rel="noopener noreferrer"
-          >My Internal Developer Platform<span aria-hidden="true"> ↗</span></a
+        <a
+          href="https://blog.mattjarrett.dev/platform/"
+          target="_blank"
+          rel="noopener noreferrer"
+          (mouseenter)="mark.replay()"
+          ><app-launchpad-mark #mark aria-hidden="true" />My Internal Developer Platform<span
+            aria-hidden="true"
+          >
+            ↗</span
+          ></a
         >
       </h1>
       <hr />
@@ -12,8 +20,6 @@
         minute.
       </p>
     </div>
-
-    <app-sandbox-cta />
 
     <div class="cols">
       <div class="col">
@@ -35,21 +41,24 @@
       </div>
 
       <div class="col">
-        @if (data()?.workspaces; as ws) {
-          <div class="big">
-            <b>{{ ws.averageSeconds | number: '1.0-0' }}<small>s</small></b>
-            <span>Average workspace, create to ready</span>
-          </div>
-        } @else {
-          <div class="big">
-            <b>–</b>
-            <span>{{
-              failed()
-                ? 'Live stats are unavailable right now'
-                : 'Average workspace, create to ready'
-            }}</span>
-          </div>
-        }
+        <div class="head-row">
+          @if (data()?.workspaces; as ws) {
+            <div class="big">
+              <b>{{ ws.averageSeconds | number: '1.0-0' }}<small>s</small></b>
+              <span>Average workspace, create to ready</span>
+            </div>
+          } @else {
+            <div class="big">
+              <b>–</b>
+              <span>{{
+                failed()
+                  ? 'Live stats are unavailable right now'
+                  : 'Average workspace, create to ready'
+              }}</span>
+            </div>
+          }
+          <app-sandbox-cta />
+        </div>
 
         @if (build(); as b) {
           <div class="race">

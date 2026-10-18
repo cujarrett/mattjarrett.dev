@@ -28,8 +28,9 @@
   --hl-good: #73bf69;
   --hl-warn: #fade2a;
   --hl-crit: #f2495c;
-  --hl-s1: #3987e5;
-  --hl-s2: #d95926;
+  /* Blue and purple, since green, yellow and red mean health. */
+  --hl-s1: #5794f2;
+  --hl-s2: #ca95e5;
 }
 
 html {

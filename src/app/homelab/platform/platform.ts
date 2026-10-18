@@ -4,6 +4,7 @@ import {
   DestroyRef,
   ElementRef,
   PLATFORM_ID,
+  Injector,
   afterNextRender,
   computed,
   inject,
@@ -15,6 +16,7 @@ import { Reveal } from '../../shared/reveal'
 import { KindIcon } from '../kind-icon'
 import { LiveSource } from '../live-source'
 import { SandboxCta } from './sandbox-cta'
+import { LaunchpadMark } from './launchpad-mark'
 
 const TYPE_NAMES: Record<string, string> = {
   Api: 'APIs',
@@ -33,7 +35,7 @@ const TYPE_NAMES: Record<string, string> = {
 
 @Component({
   selector: 'app-platform',
-  imports: [DecimalPipe, Reveal, KindIcon, LiveSource, SandboxCta],
+  imports: [DecimalPipe, Reveal, KindIcon, LiveSource, SandboxCta, LaunchpadMark],
   templateUrl: './platform.html',
   styleUrl: './platform.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,8 +49,10 @@ export class Platform {
   protected readonly failed = signal(false)
   protected readonly updatedAt = signal<number | null>(null)
 
-  // Seconds into the replay. Null means at rest, which shows the finished build.
-  private readonly t = signal<number | null>(null)
+  // Seconds into the replay.
+  // 0: empty bars, waiting to scroll into view.
+  // null: finished, or motion is off.
+  private readonly t = signal<number | null>(0)
 
   protected readonly types = computed(() =>
     (this.data()?.running.byType ?? []).map((r) => ({
@@ -69,7 +73,7 @@ export class Platform {
       clock: t.toFixed(1),
       max,
       ticks: [0, max / 4, max / 2, (3 * max) / 4, max],
-      playing: this.t() !== null,
+      playing: (this.t() ?? 0) > 0,
       now: (t / max) * 100,
       steps: ws.build.steps.map((s) => ({
         ...s,
@@ -84,6 +88,7 @@ export class Platform {
 
   constructor() {
     const destroyRef = inject(DestroyRef)
+    const injector = inject(Injector)
     // A frame only exists in a browser. The server render has no cancelAnimationFrame.
     destroyRef.onDestroy(() => this.frame && cancelAnimationFrame(this.frame))
 
@@ -97,36 +102,46 @@ export class Platform {
       }, 60_000)
       destroyRef.onDestroy(() => clearInterval(ticker))
       if (!this.data()) return
-      // Replays once, the first time the build scrolls into view.
-      const target = this.host.nativeElement.querySelector('.steps')
-      if (!target || !('IntersectionObserver' in window)) return
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((e) => e.isIntersecting)) {
-            observer.disconnect()
-            this.play()
-          }
-        },
-        { threshold: 0.6 },
-      )
-      observer.observe(target)
+      // The chart only exists once the data has rendered, so wait for that render.
+      afterNextRender(() => this.replayWhenSeen(), { injector })
     })
   }
 
   private async load() {
     try {
-      this.data.set(await this.stats.platform())
-      this.updatedAt.set(Date.now())
+      const { data, at } = await this.stats.platform()
+      this.data.set(data)
+      this.updatedAt.set(at)
       this.failed.set(false)
     } catch {
       this.failed.set(true)
     }
   }
 
+  // Replays once, the first time the build scrolls into view.
+  private replayWhenSeen() {
+    const target = this.host.nativeElement.querySelector('.steps')
+    const win = this.host.nativeElement.ownerDocument.defaultView
+    const still = !win || win.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!target || still || !('IntersectionObserver' in win)) {
+      this.t.set(null)
+      return
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          observer.disconnect()
+          this.play()
+        }
+      },
+      { threshold: 0.6 },
+    )
+    observer.observe(target)
+  }
+
   private play() {
     const ws = this.data()?.workspaces
-    const win = this.host.nativeElement.ownerDocument.defaultView
-    if (!ws || !win || win.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!ws) return
     cancelAnimationFrame(this.frame)
     const start = performance.now()
     const step = (now: number) => {

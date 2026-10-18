@@ -3,13 +3,12 @@
     <div class="section-header" appReveal>
       <h1 id="automerge-title" class="section-heading">
         <a href="https://blog.mattjarrett.dev/automerge/" target="_blank" rel="noopener noreferrer"
-          >Automating My Dependency Busywork<span aria-hidden="true"> ↗</span></a
+          >Destroy All Toil<span aria-hidden="true"> ↗</span></a
         >
       </h1>
       <hr />
       <p class="subline">
-        CI merges minor and patch dependency updates once every check passes. Developers stop
-        speedrunning routine pull requests and save their reviews for the ones that matter.
+        Stop training engineers to speedrun PRs. We need them sharp where it matters.
       </p>
     </div>
 
@@ -18,7 +17,13 @@
         <div class="big">
           @if (data(); as d) {
             <b>{{ d.automatic | number }}</b>
-            <span>merged automatically since {{ since() }}</span>
+            <span
+              >dependency updates merged automatically since <i class="date">{{ since() }}</i></span
+            >
+            <p class="hand">
+              <b>{{ d.byHand | number }}</b>
+              <span>merged by hand in the same time</span>
+            </p>
           } @else {
             <b>–</b>
             <span>{{

@@ -1,5 +1,6 @@
 import {
   ago,
+  thresholdStops,
   bytesPerSecond,
   daysSince,
   gibibytes,
@@ -60,5 +61,14 @@ describe('homelab chart helpers', () => {
   it('gibibytes rounds to the nominal size of a Pi', () => {
     expect(gibibytes(17_002_577_920)).toBe(16)
     expect(gibibytes(8_454_602_752)).toBe(8)
+  })
+
+  it('thresholdStops stays green below the warning line and turns where the line crosses it', () => {
+    expect(new Set(thresholdStops({ lo: 10, hi: 60 }, 70, 85).map((s) => s.offset))).toEqual(
+      new Set([0, 1]),
+    )
+    const stops = thresholdStops({ lo: 0, hi: 100 }, 70, 85)
+    const warn = stops.find((s) => s.health === 'warn')!.offset
+    expect(warn).toBeCloseTo((30 - 3 - 0.85 * 24) / 30)
   })
 })

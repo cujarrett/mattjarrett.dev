@@ -62,9 +62,9 @@ const automerge: AutomergeStats = {
 }
 
 const fakeStats = {
-  cluster: () => Promise.resolve(cluster),
-  platform: () => Promise.resolve(platform),
-  automerge: () => Promise.resolve(automerge),
+  cluster: () => Promise.resolve({ data: cluster, at: Date.now() }),
+  platform: () => Promise.resolve({ data: platform, at: Date.now() }),
+  automerge: () => Promise.resolve({ data: automerge, at: Date.now() }),
 }
 
 async function render<T>(component: new () => T) {
@@ -107,13 +107,13 @@ describe('Cluster', () => {
 })
 
 describe('Platform', () => {
-  it('shows the running total, the average and the finished build at rest', async () => {
+  it('shows the running total, the average and a build waiting to replay', async () => {
     const el = await render(Platform)
     expect(el.querySelector('.big b')?.textContent).toBe('31')
     expect(el.textContent).toContain('GraphQL services')
     expect(el.textContent).toContain('40')
-    expect(el.querySelectorAll('.step.done').length).toBe(2)
-    expect(el.querySelector('.clock')?.textContent).toContain('41.0')
+    expect(el.querySelectorAll('.step.done').length).toBe(1)
+    expect(el.querySelector('.clock')?.textContent).toContain('0.0')
   })
 })
 

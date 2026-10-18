@@ -35,6 +35,43 @@ export function sparkPoints(values: (number | null)[], height = 30, span?: Span)
     .join(' ')
 }
 
+// Closes a sparkline down to the bottom edge, for the shaded area under it.
+export function areaPoints(points: string, height = 30): string {
+  return points ? `${points} 100,${height} 0,${height}` : ''
+}
+
+export interface Stop {
+  offset: number
+  health: Health
+}
+
+// Gradient stops that colour a sparkline by value, like Grafana's "from thresholds".
+// Uses the same scale and padding as sparkPoints, so the colour changes where the line crosses.
+export function thresholdStops(span: Span, warn: number, crit: number, height = 30): Stop[] {
+  if (span.hi === span.lo) {
+    const h = health(span.lo, warn, crit)
+    return [
+      { offset: 0, health: h },
+      { offset: 1, health: h },
+    ]
+  }
+  const pad = 3
+  const at = (v: number) => {
+    const y = height - pad - ((v - span.lo) / (span.hi - span.lo)) * (height - 2 * pad)
+    return Math.min(1, Math.max(0, y / height))
+  }
+  const c = at(crit)
+  const w = at(warn)
+  return [
+    { offset: 0, health: 'crit' },
+    { offset: c, health: 'crit' },
+    { offset: c, health: 'warn' },
+    { offset: w, health: 'warn' },
+    { offset: w, health: 'good' },
+    { offset: 1, health: 'good' },
+  ]
+}
+
 export function ago(ms: number): string {
   const s = Math.max(0, Math.floor(ms / 1000))
   if (s < 5) return 'just now'

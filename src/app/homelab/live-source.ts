@@ -94,7 +94,7 @@ export class LiveSource {
     const at = this.updatedAt()
     if (at === null)
       return this.failed() ? 'Live data is unavailable right now' : 'Connecting to the cluster'
-    return `Live, updated ${ago(this.now() - at)}`
+    return `Updated ${ago(this.now() - at)}`
   })
 
   constructor() {

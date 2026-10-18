@@ -51,7 +51,14 @@
 }
 
 .section-heading a {
+  --mark-size: 1.4em;
   color: var(--hl-ink);
+}
+
+/* Inline with the words, so a wrapped heading keeps the mark at its start. */
+.section-heading app-launchpad-mark {
+  margin-right: 0.3em;
+  vertical-align: -0.3em;
 }
 
 .section-heading a:hover {
@@ -102,6 +109,15 @@
   font-size: 0.32em;
   letter-spacing: 0;
   color: var(--hl-ink-2);
+}
+
+/* The average and the sandbox button share one row, the button in the empty right side. */
+.head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .big .label-row {
@@ -286,11 +302,16 @@ app-kind-icon {
 @media (max-width: 560px) {
   .step,
   .axis {
-    grid-template-columns: 110px minmax(0, 1fr) 44px;
+    grid-template-columns: 132px minmax(0, 1fr) 44px;
     gap: 8px;
+    font-size: 13px;
+  }
+
+  .nm {
+    white-space: nowrap;
   }
 
   .overlay {
-    inset: -6px 52px -6px 118px;
+    inset: -6px 52px -6px 140px;
   }
 }

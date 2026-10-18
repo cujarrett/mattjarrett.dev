@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   PLATFORM_ID,
   afterNextRender,
   computed,
@@ -11,7 +12,24 @@ import {
 import { DOCUMENT, isPlatformBrowser } from '@angular/common'
 import { ClusterRange, ClusterStats, Stats } from '../stats'
 import { LiveSource } from '../live-source'
-import { bytesPerSecond, daysSince, gibibytes, health, last, spanOf, sparkPoints } from '../charts'
+import {
+  areaPoints,
+  bytesPerSecond,
+  daysSince,
+  gibibytes,
+  health,
+  last,
+  spanOf,
+  sparkPoints,
+  thresholdStops,
+} from '../charts'
+
+// One node sparkline: the line coloured by the dashboard thresholds, and the area under it.
+function chart(id: string, values: (number | null)[]) {
+  const points = sparkPoints(values)
+  const span = values.some((v) => v !== null) ? spanOf(values) : { lo: 0, hi: 0 }
+  return { id: `hl-${id}`, points, area: areaPoints(points), stops: thresholdStops(span, 70, 85) }
+}
 
 @Component({
   selector: 'app-cluster',
@@ -24,6 +42,7 @@ export class Cluster {
   private readonly stats = inject(Stats)
   private readonly platformId = inject(PLATFORM_ID)
   private readonly document = inject(DOCUMENT)
+  private readonly host = inject(ElementRef)
 
   protected readonly ranges: ClusterRange[] = ['1d', '1w', '1m']
   protected readonly range = signal<ClusterRange>('1d')
@@ -63,10 +82,10 @@ export class Cluster {
         role: `${role}, ${gibibytes(n.memoryBytes)} GB`,
         cpu: Math.round(cpu),
         cpuHealth: health(cpu, 70, 85),
-        cpuPoints: sparkPoints(n.cpu),
+        cpuChart: chart(`cpu-${n.name}`, n.cpu),
         mem: Math.round(mem),
         memHealth: health(mem, 70, 85),
-        memPoints: sparkPoints(n.memory),
+        memChart: chart(`mem-${n.name}`, n.memory),
         temp: n.temperatureC === null ? '–' : `${n.temperatureC.toFixed(1)}°C`,
         tempHealth: health(n.temperatureC ?? 0, 70, 80),
       }
@@ -82,6 +101,8 @@ export class Cluster {
       return {
         a: sparkPoints(a, 44, span),
         b: sparkPoints(b, 44, span),
+        aArea: areaPoints(sparkPoints(a, 44, span), 44),
+        bArea: areaPoints(sparkPoints(b, 44, span), 44),
         aNow: bytesPerSecond(last(a)),
         bNow: bytesPerSecond(last(b)),
       }
@@ -90,7 +111,11 @@ export class Cluster {
   })
 
   // Every range is kept once loaded, so switching shows numbers at once.
-  private readonly byRange = new Map<ClusterRange, { data: ClusterStats; at: number }>()
+  // at: when the API read the numbers. fetched: when this page last asked.
+  private readonly byRange = new Map<
+    ClusterRange,
+    { data: ClusterStats; at: number; fetched: number }
+  >()
   private readonly loading = new Set<ClusterRange>()
 
   constructor() {
@@ -98,18 +123,31 @@ export class Cluster {
     afterNextRender(async () => {
       if (!isPlatformBrowser(this.platformId)) return
       await this.load('1d')
-      // Fetched before anyone clicks, so the longer ranges never keep a visitor waiting.
-      await this.load('1w')
-      await this.load('1m')
+      this.prefetchWhenSeen()
       const ticker = setInterval(() => {
         this.now.set(Date.now())
-        const at = this.updatedAt() ?? 0
+        const fetched = this.byRange.get(this.range())?.fetched ?? 0
         // Refresh once a minute, and only while someone can see the page.
-        if (this.now() - at >= 60_000 && this.document.visibilityState === 'visible')
+        if (this.now() - fetched >= 60_000 && this.document.visibilityState === 'visible')
           this.load(this.range())
       }, 1000)
       destroyRef.onDestroy(() => clearInterval(ticker))
     })
+  }
+
+  // Fetched once the section is on screen, before anyone clicks.
+  // Visitors who never scroll this far cost no extra Prometheus queries.
+  private prefetchWhenSeen() {
+    const host: HTMLElement = this.host.nativeElement
+    const win = host.ownerDocument.defaultView
+    if (!win || !('IntersectionObserver' in win)) return
+    const observer = new IntersectionObserver(async (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return
+      observer.disconnect()
+      await this.load('1w')
+      await this.load('1m')
+    })
+    observer.observe(host)
   }
 
   protected setRange(range: ClusterRange) {
@@ -119,16 +157,15 @@ export class Cluster {
       this.data.set(kept.data)
       this.updatedAt.set(kept.at)
     }
-    if (!kept || Date.now() - kept.at >= 60_000) this.load(range)
+    if (!kept || Date.now() - kept.fetched >= 60_000) this.load(range)
   }
 
   private async load(range: ClusterRange) {
     if (this.loading.has(range)) return
     this.loading.add(range)
     try {
-      const data = await this.stats.cluster(range)
-      const at = Date.now()
-      this.byRange.set(range, { data, at })
+      const { data, at } = await this.stats.cluster(range)
+      this.byRange.set(range, { data, at, fetched: Date.now() })
       if (range !== this.range()) return
       this.data.set(data)
       this.failed.set(false)

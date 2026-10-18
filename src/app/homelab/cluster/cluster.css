@@ -143,6 +143,32 @@ polyline {
   vector-effect: non-scaling-stroke;
 }
 
+/* Grafana-style shading under each line. */
+polygon.area {
+  fill-opacity: 0.18;
+  stroke: none;
+}
+
+polygon.s1 {
+  fill: var(--hl-s1);
+}
+
+polygon.s2 {
+  fill: var(--hl-s2);
+}
+
+stop.good {
+  stop-color: var(--hl-good);
+}
+
+stop.warn {
+  stop-color: var(--hl-warn);
+}
+
+stop.crit {
+  stop-color: var(--hl-crit);
+}
+
 .v,
 .temp {
   text-align: right;
@@ -152,18 +178,6 @@ polyline {
 
 .right {
   text-align: right;
-}
-
-polyline.good {
-  stroke: var(--hl-good);
-}
-
-polyline.warn {
-  stroke: var(--hl-warn);
-}
-
-polyline.crit {
-  stroke: var(--hl-crit);
 }
 
 span.good {

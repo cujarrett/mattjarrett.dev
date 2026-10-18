@@ -1,6 +1,5 @@
 :host {
   display: block;
-  margin-bottom: 44px;
 }
 
 /* The same button as Launchpad's own sandbox invite. */
@@ -14,11 +13,14 @@
   padding: 12px 32px;
   border: 2px solid transparent;
   border-radius: 6px;
-  background-clip: padding-box;
-  color: #e2e8f0;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5) padding-box;
+  box-shadow: 0 0 28px rgba(124, 58, 237, 0.45);
+  color: #ffffff;
   font-size: 17px;
   font-weight: 700;
-  transition: color 0.2s;
+  transition:
+    color 0.2s,
+    box-shadow 0.2s;
 }
 
 .sandbox-btn::before {
@@ -40,7 +42,8 @@
 }
 
 .sandbox-btn:hover {
-  color: #c4b5fd;
+  color: #ffffff;
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.7);
 }
 
 .sandbox-btn:hover::before {
@@ -53,7 +56,7 @@
   margin-top: 2px;
   font-size: 12px;
   font-weight: 400;
-  color: #8492a6;
+  color: #ddd6fe;
 }
 
 @keyframes border-run {
