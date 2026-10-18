@@ -62,12 +62,13 @@ export class Platform {
     const ws = this.data()?.workspaces
     if (!ws) return null
     const total = ws.build.totalSeconds
-    const max = Math.max(15, Math.ceil(total / 15) * 15)
+    // Scaled to the build itself, so the slowest step fills the row.
+    const max = Math.max(4, Math.ceil(total / 4) * 4)
     const t = this.t() ?? total
     return {
       clock: t.toFixed(1),
       max,
-      ticks: [0, max / 3, (2 * max) / 3, max],
+      ticks: [0, max / 4, max / 2, (3 * max) / 4, max],
       playing: this.t() !== null,
       now: (t / max) * 100,
       steps: ws.build.steps.map((s) => ({

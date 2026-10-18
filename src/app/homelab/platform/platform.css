@@ -142,7 +142,9 @@ app-kind-icon {
   color: var(--c);
 }
 
+/* Stretches to the height of the resource list beside it. */
 .race {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -163,8 +165,10 @@ app-kind-icon {
 }
 
 .steps {
+  flex: 1;
   position: relative;
   display: grid;
+  align-content: space-between;
   gap: 12px;
 }
 
