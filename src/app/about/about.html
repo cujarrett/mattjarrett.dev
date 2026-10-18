@@ -1,7 +1,7 @@
 <section id="about" class="about">
   <div class="section-header" appReveal>
     <h1 class="section-heading">about me</h1>
-    <hr class="light" />
+    <hr />
   </div>
 
   <div class="about-columns">
@@ -9,11 +9,9 @@
       <div class="about-block" appReveal>
         <h2 class="text-light-faded">Background</h2>
         <p class="text-faded">
-          I'm a passionate and detail oriented Staff Software Engineer based in Illinois.
-          Experienced leader where I enjoy design, clean code, and building positive team
-          environments and strong developer experiences. I enjoy turning problems into solutions
-          that make people smile. I enjoy continuous learning and exploring new technologies. When
-          I'm not coding at home or work, I enjoy time with my family and photography.
+          I'm a Staff Engineer in Illinois who loves design, clean code, and helping people do their
+          best work. I like turning problems into solutions that make people smile. Away from code,
+          you'll find me with my family, on my bike, or behind a camera.
         </p>
       </div>
 
@@ -31,37 +29,30 @@
         <h2 class="text-light-faded">Certifications</h2>
         <div class="certs">
           @for (cert of certifications; track cert.url) {
-            <div class="cert-row">
-              <div class="cert-img">
-                <a
-                  [href]="cert.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  [attr.aria-label]="cert.name"
-                >
-                  <img [ngSrc]="cert.img" [alt]="cert.name" width="100" height="100" />
-                </a>
-              </div>
-              <div class="cert-name hide-on-mobile">
-                <h3>
-                  <a [href]="cert.url" target="_blank" rel="noopener noreferrer">{{ cert.name }}</a>
-                </h3>
-              </div>
+            <div class="cert-img">
+              <a
+                [href]="cert.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.aria-label]="cert.name"
+              >
+                <img [ngSrc]="cert.img" [alt]="cert.name" width="100" height="100" />
+              </a>
             </div>
           }
         </div>
       </div>
       <div id="skills-graph">
         @for (skill of skills; track skill.name) {
-          <div class="skillbar" [attr.data-percent]="skill.percent + '%'">
-            <div class="skillbar-title" [style.background]="skill.color">
-              <span>{{ skill.name }}</span>
+          <div class="skill">
+            <span class="skill-name">{{ skill.name }}</span>
+            <div class="track">
+              <div
+                class="fill"
+                [style.background]="skill.color"
+                [style.width]="barsAnimated() ? skill.percent + '%' : '0%'"
+              ></div>
             </div>
-            <div
-              class="skillbar-bar"
-              [style.background]="skill.color"
-              [style.width]="barsAnimated() ? skill.percent + '%' : '0%'"
-            ></div>
           </div>
         }
       </div>

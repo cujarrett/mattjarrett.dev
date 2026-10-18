@@ -1,0 +1,112 @@
+<div class="group">
+  <h2>Cluster</h2>
+  <app-live-source [updatedAt]="updatedAt()" [failed]="failed()" />
+  <span class="seg" role="group" aria-label="Time range">
+    @for (r of ranges; track r) {
+      <button type="button" [attr.aria-pressed]="range() === r" (click)="setRange(r)">
+        {{ r }}
+      </button>
+    }
+  </span>
+</div>
+
+<div class="stats">
+  @let s = summary();
+  <div class="stat">
+    <span class="label">Availability, 30d</span>
+    <span class="value nines">{{ s?.availability ?? '–' }}</span>
+  </div>
+  <div class="stat">
+    <span class="label">Since power outage</span>
+    <span class="value"
+      >{{ s?.power?.value ?? '–' }}<small>{{ s?.power?.unit ?? 'days' }}</small></span
+    >
+  </div>
+  <div class="stat">
+    <span class="label">Since internet outage</span>
+    <span class="value"
+      >{{ s?.internet?.value ?? '–' }}<small>{{ s?.internet?.unit ?? 'days' }}</small></span
+    >
+  </div>
+  <div class="stat">
+    <span class="label">Nodes</span>
+    <span class="value"
+      >{{ s?.nodes?.ready ?? '–' }}<small>of {{ s?.nodes?.total ?? 4 }}</small></span
+    >
+  </div>
+  <div class="stat">
+    <span class="label">Running pods</span>
+    <span class="value">{{ s?.pods ?? '–' }}</span>
+  </div>
+  <div class="stat">
+    <span class="label">Apps in sync</span>
+    <span class="value"
+      >{{ s?.apps?.synced ?? '–' }}<small>of {{ s?.apps?.total ?? '–' }}</small></span
+    >
+  </div>
+</div>
+
+<div class="grid">
+  <div class="panel nodes">
+    <div class="row head">
+      <span class="label">Node</span><span class="label">CPU</span><span class="label">Memory</span
+      ><span class="label right">Temp</span>
+    </div>
+    @for (n of nodes(); track n.name) {
+      <div class="row">
+        <div class="nm">
+          <b>{{ n.name }}</b
+          ><span>{{ n.role }}</span>
+        </div>
+        <div class="metric">
+          <svg viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+            <polyline [attr.points]="n.cpuPoints" [class]="n.cpuHealth" />
+          </svg>
+          <span class="v" [class]="n.cpuHealth">{{ n.cpu }}%</span>
+        </div>
+        <div class="metric">
+          <svg viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+            <polyline [attr.points]="n.memPoints" [class]="n.memHealth" />
+          </svg>
+          <span class="v" [class]="n.memHealth">{{ n.mem }}%</span>
+        </div>
+        <span class="temp" [class]="n.tempHealth">{{ n.temp }}</span>
+      </div>
+    }
+  </div>
+  <div class="side">
+    @let ioNow = io();
+    <div class="panel io">
+      <div class="io-head">
+        <span class="label">Network</span>
+        <span class="io-vals"
+          ><span class="s1"
+            >In <b>{{ ioNow?.network?.aNow ?? '–' }}</b></span
+          ><span class="s2"
+            >Out <b>{{ ioNow?.network?.bNow ?? '–' }}</b></span
+          ></span
+        >
+      </div>
+      <svg viewBox="0 0 100 44" preserveAspectRatio="none" aria-hidden="true">
+        <polyline [attr.points]="ioNow?.network?.a ?? ''" class="s1" />
+        <polyline [attr.points]="ioNow?.network?.b ?? ''" class="s2" />
+      </svg>
+    </div>
+    <div class="panel io">
+      <div class="io-head">
+        <span class="label">Disk</span>
+        <span class="io-vals"
+          ><span class="s1"
+            >Read <b>{{ ioNow?.disk?.aNow ?? '–' }}</b></span
+          ><span class="s2"
+            >Write <b>{{ ioNow?.disk?.bNow ?? '–' }}</b></span
+          ></span
+        >
+      </div>
+      <svg viewBox="0 0 100 44" preserveAspectRatio="none" aria-hidden="true">
+        <polyline [attr.points]="ioNow?.disk?.a ?? ''" class="s1" />
+        <polyline [attr.points]="ioNow?.disk?.b ?? ''" class="s2" />
+      </svg>
+    </div>
+  </div>
+</div>

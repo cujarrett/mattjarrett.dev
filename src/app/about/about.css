@@ -3,7 +3,12 @@
 }
 
 .about {
+  --about-ink: #ffffff;
+  --about-ink-2: rgba(255, 255, 255, 0.7);
+  --about-muted: rgba(255, 255, 255, 0.4);
+  --about-track: rgba(255, 255, 255, 0.1);
   background-color: #292c33;
+  color: var(--about-ink);
   padding-top: 100px;
   padding-bottom: 80px;
   overflow: auto;
@@ -18,16 +23,16 @@
 }
 
 .section-heading {
-  color: #fff;
+  color: var(--about-ink);
   margin-top: 0;
   font-size: 36px;
   font-weight: 700;
   text-transform: lowercase;
 }
 
-hr.light {
+.section-header hr {
   border: none;
-  border-top: 3px solid white;
+  border-top: 3px solid var(--about-ink);
   max-width: 50px;
   margin: 20px auto;
 }
@@ -57,20 +62,20 @@ hr.light {
 }
 
 .text-light-faded {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--about-ink);
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 10px;
 }
 
 .text-faded {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--about-ink-2);
   font-size: 14px;
   line-height: 1.5;
 }
 
 .text-faded-more {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--about-muted);
   font-size: 16px;
   font-weight: 600;
   margin-top: 15px;
@@ -78,19 +83,11 @@ hr.light {
 }
 
 /* Certifications */
+/* Badges sit in one row, since each badge already reads as its certification. */
 .certs {
-  overflow: auto;
-}
-
-.cert-row {
   display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.cert-img {
-  width: 15%;
-  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 24px;
 }
 
 .cert-img img {
@@ -100,65 +97,33 @@ hr.light {
   width: auto;
 }
 
-.cert-name {
-  width: 85%;
-  padding-left: 16px;
-}
-
-.cert-name h3 a {
-  color: #fff;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.cert-name h3 a:hover {
-  color: var(--theme-primary);
-}
-
 /* Skill Bars */
 #skills-graph {
+  display: grid;
+  gap: 14px;
   padding-top: 10px;
 }
 
-.skillbar {
-  position: relative;
+.skill-name {
   display: block;
-  margin-bottom: 15px;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.9);
-  height: 35px;
-  border-radius: 3px;
-}
-
-.skillbar-title {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  font-size: 12px;
-  font-weight: bold;
-  color: #fff;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
   font-family: var(--font-sans);
-  z-index: 1;
+  color: var(--about-ink);
 }
 
-.skillbar-title span {
-  display: block;
-  width: 200px;
-  padding: 0 10px;
-  height: 35px;
-  line-height: 35px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  color: rgba(0, 0, 0, 1);
+.track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--about-track);
+  overflow: hidden;
 }
 
-.skillbar-bar {
-  height: 35px;
+.fill {
+  height: 100%;
   width: 0;
-  border-radius: 3px;
+  border-radius: 999px;
   transition: width 3s ease;
 }
 
@@ -168,7 +133,7 @@ hr.light {
 }
 
 .more-about-info a {
-  color: #fff;
+  color: var(--about-ink);
   font-family: var(--font-sans);
   font-size: 14px;
 }
@@ -197,7 +162,8 @@ hr.light {
     display: none;
   }
 
-  .cert-img {
-    width: 50%;
+  .certs {
+    justify-content: center;
+    gap: 16px;
   }
 }

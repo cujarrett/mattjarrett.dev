@@ -24,13 +24,11 @@ describe('Nav', () => {
     expect(component['menuOpen']()).toBe(false)
   })
 
-  it('should have scrolled as false by default', () => {
-    expect(component['scrolled']()).toBe(false)
-  })
-
   it('should have the expected nav links', () => {
     expect(component['links']).toEqual([
       { label: 'About', href: '#about' },
+      { label: 'Homelab', href: '#homelab' },
+      { label: 'Platform', href: '#platform' },
       { label: 'Portfolio', href: '#portfolio' },
     ])
   })

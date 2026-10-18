@@ -14,6 +14,22 @@
   --font-sans: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   --font-serif: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
   --max-content-width: 1750px;
+
+  /* Homelab, platform and automerge sections */
+  --hl-ink: #ffffff;
+  --hl-ink-2: rgba(255, 255, 255, 0.78);
+  --hl-muted: rgba(255, 255, 255, 0.55);
+  --hl-panel: #31353d;
+  --hl-border: rgba(255, 255, 255, 0.1);
+  --hl-track: rgba(255, 255, 255, 0.1);
+  --hl-grid: rgba(255, 255, 255, 0.08);
+  --hl-blue: #5794f2;
+  --hl-purple: #b877d9;
+  --hl-good: #73bf69;
+  --hl-warn: #fade2a;
+  --hl-crit: #f2495c;
+  --hl-s1: #3987e5;
+  --hl-s2: #d95926;
 }
 
 html {

@@ -1,0 +1,96 @@
+<section id="platform" class="platform" aria-labelledby="platform-title">
+  <div class="inner">
+    <div class="section-header" appReveal>
+      <h1 id="platform-title" class="section-heading">
+        <a href="https://blog.mattjarrett.dev/platform/" target="_blank" rel="noopener noreferrer"
+          >My Internal Developer Platform<span aria-hidden="true"> ↗</span></a
+        >
+      </h1>
+      <hr />
+      <p class="subline">
+        Developers ask for an app, a database or a bucket. Kubernetes has it running in under a
+        minute.
+      </p>
+    </div>
+
+    <app-sandbox-cta />
+
+    <div class="cols">
+      <div class="col">
+        <div class="big">
+          <b>{{ data()?.running?.total ?? '–' }}</b>
+          <span class="label-row"
+            >Platform resources running now
+            <app-live-source [updatedAt]="updatedAt()" [failed]="failed()"
+          /></span>
+        </div>
+        <div class="types">
+          @for (t of types(); track t.name) {
+            <div>
+              <span><app-kind-icon [kind]="t.type" />{{ t.name }}</span
+              ><b>{{ t.count }}</b>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="col">
+        @if (data()?.workspaces; as ws) {
+          <div class="big">
+            <b>{{ ws.averageSeconds | number: '1.0-0' }}<small>s</small></b>
+            <span>Average workspace, create to ready</span>
+          </div>
+        } @else {
+          <div class="big">
+            <b>–</b>
+            <span>{{
+              failed()
+                ? 'Live stats are unavailable right now'
+                : 'Average workspace, create to ready'
+            }}</span>
+          </div>
+        }
+
+        @if (build(); as b) {
+          <div class="race">
+            <div class="steps">
+              @if (b.playing) {
+                <div class="overlay" aria-hidden="true">
+                  <i class="now" [style.left.%]="b.now"></i>
+                </div>
+              }
+              @for (s of b.steps; track s.name) {
+                <div class="step" [class]="s.where" [class.done]="s.done">
+                  <span class="nm">
+                    @if (s.kind) {
+                      <app-kind-icon [kind]="s.kind" />
+                    }
+                    {{ s.name }}</span
+                  >
+                  <div class="lane">
+                    <div class="bar" [class]="s.where" [style.width.%]="s.width"></div>
+                  </div>
+                  <span class="t">{{ s.label }}</span>
+                </div>
+              }
+            </div>
+            <div class="axis">
+              <span></span>
+              <div>
+                @for (tick of b.ticks; track tick) {
+                  <span>{{ tick }}s</span>
+                }
+              </div>
+              <span></span>
+            </div>
+            <div class="key">
+              <span class="pi">On the Pis</span><span class="aws">In AWS</span
+              ><span class="app">App serving traffic</span
+              ><span class="clock">{{ b.clock }}<small>s</small></span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

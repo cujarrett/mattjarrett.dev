@@ -1,0 +1,217 @@
+:host {
+  display: block;
+}
+
+/* Teal, so it stays apart from the purple homelab and indigo platform above. */
+.automerge {
+  --am: #2dd4bf;
+  --hand: rgba(255, 255, 255, 0.45);
+  padding: 80px 0 72px;
+  color: var(--hl-ink);
+  font-family: var(--font-sans);
+  background: radial-gradient(120% 90% at 0% 0%, #134e4a, #0b1c1d 70%);
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 max(16px, 2rem);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-heading {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 36px);
+  text-wrap: balance;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+.section-heading a {
+  color: var(--hl-ink);
+}
+
+.section-heading a:hover {
+  color: var(--am);
+}
+
+.section-header hr {
+  border: none;
+  border-top: 3px solid var(--am);
+  max-width: 50px;
+  margin: 20px auto 14px;
+}
+
+.subline {
+  text-wrap: balance;
+  margin: 0 auto;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--hl-ink-2);
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.big b {
+  display: block;
+  font-size: clamp(64px, 9vw, 104px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--am);
+  font-variant-numeric: tabular-nums;
+}
+
+.big span {
+  font-size: 15px;
+  color: var(--hl-ink-2);
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.chart {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  grid-template-rows: 230px 22px;
+  column-gap: 6px;
+  padding-top: 20px;
+}
+
+.ticks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 11px;
+  text-align: right;
+  color: var(--hl-muted);
+  transform: translateY(-0.5em);
+  height: calc(100% + 1em);
+}
+
+.plot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  background: repeating-linear-gradient(to top, var(--hl-grid) 0 1px, transparent 1px 25%);
+}
+
+.day {
+  display: flex;
+  flex: 1;
+  flex-direction: column-reverse;
+  height: 100%;
+}
+
+.day i {
+  display: block;
+  transform-origin: bottom;
+}
+
+.auto {
+  --c: var(--am);
+}
+
+.hand {
+  --c: var(--hand);
+}
+
+.day i {
+  background: var(--c);
+}
+
+.grow .day i {
+  animation: grow 0.6s ease-out backwards;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+.live {
+  position: absolute;
+  top: -20px;
+  bottom: 0;
+  border-left: 1px dashed #ffffff;
+}
+
+.live span {
+  position: absolute;
+  top: 0;
+  left: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.labels {
+  position: relative;
+  grid-column: 2;
+  font-size: 11px;
+  color: var(--hl-muted);
+}
+
+.labels span {
+  position: absolute;
+  top: 6px;
+  white-space: nowrap;
+}
+
+.key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  font-size: 12px;
+  color: var(--hl-ink-2);
+}
+
+.key span::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 2px;
+  background: var(--c);
+}
+
+.key .fresh {
+  margin-left: auto;
+}
+
+@media (max-width: 900px) {
+  .cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .labels span:nth-child(even) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grow .day i {
+    animation: none;
+  }
+}

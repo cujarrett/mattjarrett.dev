@@ -1,0 +1,292 @@
+:host {
+  display: block;
+}
+
+/* Launchpad's own palette, so the section and the app it links to look like one product. */
+.platform {
+  --lp-surface: #1a1d27;
+  --lp-bg: #0f1117;
+  --lp-border: #2e3347;
+  --lp-accent: #6366f1;
+  --lp-accent-soft: #c7d2fe;
+  --lp-violet: #a78bfa;
+  --lp-success: #22c55e;
+  position: relative;
+  padding: 64px 0 72px;
+  color: var(--hl-ink);
+  font-family: var(--font-sans);
+  background: radial-gradient(120% 90% at 50% 0%, #232a66, #0f1330 75%);
+}
+
+/* The grid fades out behind the content, so it frames the text without crossing it. */
+.platform::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(46, 51, 71, 0.35) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, rgba(46, 51, 71, 0.35) 1px, transparent 1px) 0 0 / 40px 40px;
+  mask-image: radial-gradient(ellipse 80% 85% at 50% 50%, transparent 55%, #000 100%);
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 max(16px, 2rem);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.section-heading {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 700;
+  text-transform: lowercase;
+  text-wrap: balance;
+}
+
+.section-heading a {
+  color: var(--hl-ink);
+}
+
+.section-heading a:hover {
+  color: var(--lp-accent-soft);
+}
+
+.section-header hr {
+  border: none;
+  border-top: 3px solid var(--lp-accent);
+  max-width: 50px;
+  margin: 16px auto 12px;
+}
+
+.subline {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--hl-ink-2);
+}
+
+.source {
+  margin: -24px 0 36px;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.5fr);
+  gap: 56px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.big b {
+  display: block;
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.big small {
+  margin-left: 6px;
+  font-size: 0.32em;
+  letter-spacing: 0;
+  color: var(--hl-ink-2);
+}
+
+.big .label-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+
+.big span {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  color: var(--hl-ink-2);
+}
+
+.types div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--hl-border);
+  font-size: 14px;
+  color: var(--hl-ink-2);
+}
+
+.types b {
+  color: var(--hl-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+app-kind-icon {
+  margin-right: 8px;
+  color: var(--hl-muted);
+}
+
+.done app-kind-icon {
+  color: var(--c);
+}
+
+.race {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.key .clock {
+  margin-left: auto;
+  color: var(--hl-ink);
+  font-size: 24px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+
+.key .clock small {
+  margin-left: 4px;
+  font-size: 14px;
+  color: var(--hl-muted);
+}
+
+.steps {
+  position: relative;
+  display: grid;
+  gap: 12px;
+}
+
+.step,
+.axis {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 48px;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.nm,
+.t {
+  color: var(--hl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.done .nm,
+.done .t {
+  color: var(--hl-ink);
+}
+
+.done .t::after {
+  content: ' ✓';
+  color: var(--hl-good);
+}
+
+.t {
+  text-align: right;
+}
+
+.lane {
+  height: 22px;
+}
+
+.bar {
+  height: 100%;
+  min-width: 3px;
+  border-radius: 4px;
+}
+
+.pi {
+  --c: var(--lp-accent);
+}
+
+.aws {
+  --c: var(--lp-violet);
+}
+
+.app {
+  --c: var(--lp-success);
+}
+
+.bar {
+  background: var(--c);
+}
+
+/* Spans the bar lanes only: past the 150px name column and its gap, short of the
+   48px time column and its gap. */
+.overlay {
+  position: absolute;
+  inset: -6px 60px -6px 162px;
+  pointer-events: none;
+}
+
+.now {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.axis {
+  font-size: 11px;
+  color: var(--hl-muted);
+}
+
+.axis div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  font-size: 12px;
+  color: var(--hl-ink-2);
+}
+
+.key span::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 2px;
+  background: var(--c);
+}
+
+.key .clock::before {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .cols {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 560px) {
+  .step,
+  .axis {
+    grid-template-columns: 110px minmax(0, 1fr) 44px;
+    gap: 8px;
+  }
+
+  .overlay {
+    inset: -6px 52px -6px 118px;
+  }
+}

@@ -33,12 +33,6 @@ export class Portfolio {
       img: 'portfolio/destiny-insights.png',
     },
     {
-      title: 'Homelab',
-      description: 'Bookshelf Kubernetes cluster',
-      url: 'https://blog.mattjarrett.dev/homelab/',
-      img: 'portfolio/k3s-homelab.png',
-    },
-    {
       title: 'ES6 in Six Hours',
       description: 'Learn ES6 in Six One Hour Sessions',
       url: 'https://github.com/cujarrett/es6-in-six-hours',
@@ -57,34 +51,10 @@ export class Portfolio {
       img: 'portfolio/my-vinyl.png',
     },
     {
-      title: "I Pub Sub'd my Sump Pump",
-      description: 'Power of platform engineering',
-      url: 'https://blog.mattjarrett.dev/i-pub-subd-my-sump-pump/',
-      img: 'portfolio/pub-sub-sump-pump.png',
-    },
-    {
-      title: 'My Bookshelf Developer Platform',
-      description: 'Learning Platform Engineering',
-      url: 'https://blog.mattjarrett.dev/platform/',
-      img: 'portfolio/platform.png',
-    },
-    {
-      title: 'Launchpad',
-      description: 'You declare what you want. The platform puts it in the air.',
-      url: 'https://launchpad.mattjarrett.dev/',
-      img: 'portfolio/launchpad.png',
-    },
-    {
       title: 'Go Template in YAML',
       description: 'YAML sees {{ }} and shrugs. This VS Code extension colors it in.',
       url: 'https://marketplace.visualstudio.com/items?itemName=cujarrett.gotemplate-yaml',
       img: 'portfolio/gotemplate-yaml.png',
-    },
-    {
-      title: 'Automating Dependency Decisions',
-      description: 'I automated dependency updates.',
-      url: 'https://blog.mattjarrett.dev/automerge/',
-      img: 'portfolio/automerge.png',
     },
   ])
 }

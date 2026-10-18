@@ -1,0 +1,72 @@
+:host {
+  display: block;
+  margin-bottom: 44px;
+}
+
+/* The same button as Launchpad's own sandbox invite. */
+:host {
+  text-align: center;
+}
+
+.sandbox-btn {
+  position: relative;
+  display: inline-block;
+  padding: 12px 32px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background-clip: padding-box;
+  color: #e2e8f0;
+  font-size: 17px;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.sandbox-btn::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa, #38bdf8, #7c3aed);
+  background-size: 300% 100%;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: border-run 2.8s linear infinite;
+  transition:
+    inset 0.2s,
+    padding 0.2s;
+}
+
+.sandbox-btn:hover {
+  color: #c4b5fd;
+}
+
+.sandbox-btn:hover::before {
+  inset: -4px;
+  padding: 4px;
+}
+
+.sandbox-btn small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #8492a6;
+}
+
+@keyframes border-run {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 300% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sandbox-btn::before {
+    animation: none;
+  }
+}

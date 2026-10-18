@@ -1,6 +1,6 @@
 # mattjarrett.dev
 
-Personal portfolio site built with Angular 20+ (signals, standalone components, OnPush), containerized with Docker (nginx), and deployed to a self-hosted Kubernetes cluster (k3s on Raspberry Pi). There is no backend - the app is a static SPA served by nginx.
+Personal portfolio site built with Angular 20+ (signals, standalone components, OnPush), containerized with Docker (nginx), and deployed to a self-hosted Kubernetes cluster (k3s on Raspberry Pi). The app is a static SPA served by nginx. The homelab section reads live numbers from [homelab-stats](https://github.com/cujarrett/homelab-stats), which nginx proxies at `/api/stats/`.
 
 - **Namespace**: `mattjarrett-dev`
 - **nginx config**: `nginx.conf` at repo root, mounted into the container
@@ -12,7 +12,7 @@ Personal portfolio site built with Angular 20+ (signals, standalone components, 
 |------|---------|
 | `nginx.conf` | nginx server config - routing, security headers, scanner blocks |
 | `Dockerfile` | Multi-stage build: Angular CLI → nginx |
-| `src/app/` | Angular components (hero, about, portfolio, contact, nav) |
+| `src/app/` | Angular components (hero, about, portfolio, homelab, contact, nav) |
 
 ## Rules
 

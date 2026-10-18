@@ -50,28 +50,33 @@ export class About {
 
   protected readonly experience = [
     {
+      title: 'Staff Engineer, Platform Engineering - State Farm',
+      period: '2026 to Present',
+      description: 'Working hard to build an internal developer platform that makes people smile.',
+    },
+    {
       title: 'Sr Software Engineer - State Farm',
-      period: '2020 to Present',
+      period: '2020 to 2026',
       description:
-        "Advancing Cloud Native and DevOps transformations in the telematics platform space. Working with an exciting mix of technology including public cloud, mobile, and IoT. Pushing what's possible with measuing risk and adding customer value. Working daily on not only technology but also culture.",
+        'Led cloud native and DevOps change for the telematics platform across public cloud, mobile, and IoT, working on culture as much as code.',
     },
     {
       title: 'Software Engineer - State Farm',
       period: '2017 to 2019',
       description:
-        'Built new solutions using React, Node, NOSQL, REST, Kubernetes, GitLab, CI/CD, Grafana, and Prometheus for enablement of large high priority enterprise initiatives. Mentored several team members in modern technology. Designed solutions for implementation. Taught classes on modern JavaScript.',
+        'Built React, Node, and Kubernetes services for high priority enterprise work. Mentored teammates and taught modern JavaScript.',
     },
     {
       title: 'Software Engineer - State Farm',
       period: '2015 to 2017',
       description:
-        "Designed and implemented many successful web services allowing developers on demand access to safe fabricated data for a variety of needs and automation. It's since been used millions of times across the enterprise, enabling development teams to focus on improving customer experience.",
+        'Built web services that give developers safe test data on demand, since then patented and used millions of times across the company.',
     },
     {
       title: 'Software Engineer - State Farm',
       period: '2011 to 2015',
       description:
-        'Designed and implemented an automated infrastructure solution offering a complete stand up and tear down process accomplished in minutes compared to days. Taught Java in Enterprise Java classes to spread knowledge. Active member of the college recruitment team including creation of campus events, hacks, and interviews. Mentored many college interns through a successful internships resulting in all receiving and accepting full time positions. Designed and implemented multiple solutions in Java.',
+        'Automated infrastructure stand up and tear down, cutting days to minutes. Taught Java, recruited on campus, and mentored interns who all went full time.',
     },
   ]
 
@@ -82,7 +87,7 @@ export class About {
     { name: 'Go', percent: 10, color: '#03a9f4' },
     { name: 'Kubernetes', percent: 65, color: '#009688' },
     { name: 'Terraform', percent: 60, color: '#8bc34a' },
-    { name: 'Python', percent: 35, color: '#ffeb3b' },
+    { name: 'Python', percent: 35, color: '#f9a825' },
   ]
 
   constructor() {

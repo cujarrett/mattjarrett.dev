@@ -1,0 +1,29 @@
+<section id="homelab" class="homelab">
+  <div class="inner">
+    <div class="section-header" appReveal>
+      <h1 class="section-heading">
+        <a href="https://blog.mattjarrett.dev/homelab/" target="_blank" rel="noopener noreferrer"
+          >My Bookshelf Kubernetes Homelab<span aria-hidden="true"> ↗</span></a
+        >
+      </h1>
+      <hr class="light" />
+    </div>
+    <figure class="photo" appReveal>
+      <img
+        src="/homelab/rack-1920.jpg"
+        srcset="
+          /homelab/rack-1280.jpg 1280w,
+          /homelab/rack-1920.jpg 1920w,
+          /homelab/rack-2560.jpg 2560w
+        "
+        sizes="(max-width: 1200px) 100vw, 1136px"
+        width="2560"
+        height="1280"
+        loading="lazy"
+        decoding="async"
+        alt="The homelab rack: four Raspberry Pi 5 nodes under a PoE switch, topped by a small screen showing a Grafana dashboard"
+      />
+    </figure>
+    <app-cluster />
+  </div>
+</section>
