@@ -76,7 +76,7 @@ export class About {
       title: 'Software Engineer - State Farm',
       period: '2011 to 2015',
       description:
-        'Automated infrastructure stand up and tear down, cutting days to minutes. Taught Java, recruited on campus, and mentored interns who all went full time.',
+        'Automated test stand up and tear down, cutting days to minutes. Taught Java, recruited on campus, and mentored interns who all went full time.',
     },
   ]
 
