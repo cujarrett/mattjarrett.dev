@@ -88,7 +88,7 @@ h2 {
 
 .grid {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
   gap: 12px;
 }
 
@@ -134,7 +134,7 @@ h2 {
 svg {
   display: block;
   width: 100%;
-  height: 30px;
+  height: 44px;
 }
 
 polyline {
@@ -146,6 +146,10 @@ polyline {
 /* Grafana-style shading under each line. */
 polygon.area {
   fill-opacity: 0.18;
+  stroke: none;
+}
+
+polygon.fade {
   stroke: none;
 }
 

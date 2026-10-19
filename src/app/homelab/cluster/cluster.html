@@ -74,8 +74,29 @@
                   <stop [attr.offset]="s.offset" [class]="s.health" />
                 }
               </linearGradient>
+              <!-- Same colours, fading out toward the bottom like a Grafana fill. -->
+              <linearGradient
+                [attr.id]="cpuC.id + '-fill'"
+                gradientUnits="userSpaceOnUse"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="30"
+              >
+                @for (s of cpuC.stops; track $index) {
+                  <stop
+                    [attr.offset]="s.offset"
+                    [attr.stop-opacity]="0.45 * (1 - s.offset)"
+                    [class]="s.health"
+                  />
+                }
+              </linearGradient>
             </defs>
-            <polygon class="area" [attr.points]="cpuC.area" [attr.fill]="'url(#' + cpuC.id + ')'" />
+            <polygon
+              class="fade"
+              [attr.points]="cpuC.area"
+              [attr.fill]="'url(#' + cpuC.id + '-fill)'"
+            />
             <polyline [attr.points]="cpuC.points" [attr.stroke]="'url(#' + cpuC.id + ')'" />
           </svg>
           <span class="v" [class]="n.cpuHealth">{{ n.cpu }}%</span>
@@ -96,8 +117,29 @@
                   <stop [attr.offset]="s.offset" [class]="s.health" />
                 }
               </linearGradient>
+              <!-- Same colours, fading out toward the bottom like a Grafana fill. -->
+              <linearGradient
+                [attr.id]="memC.id + '-fill'"
+                gradientUnits="userSpaceOnUse"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="30"
+              >
+                @for (s of memC.stops; track $index) {
+                  <stop
+                    [attr.offset]="s.offset"
+                    [attr.stop-opacity]="0.45 * (1 - s.offset)"
+                    [class]="s.health"
+                  />
+                }
+              </linearGradient>
             </defs>
-            <polygon class="area" [attr.points]="memC.area" [attr.fill]="'url(#' + memC.id + ')'" />
+            <polygon
+              class="fade"
+              [attr.points]="memC.area"
+              [attr.fill]="'url(#' + memC.id + '-fill)'"
+            />
             <polyline [attr.points]="memC.points" [attr.stroke]="'url(#' + memC.id + ')'" />
           </svg>
           <span class="v" [class]="n.memHealth">{{ n.mem }}%</span>
