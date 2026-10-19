@@ -87,7 +87,7 @@ export class About {
     { name: 'Go', percent: 10, color: '#03a9f4' },
     { name: 'Kubernetes', percent: 65, color: '#009688' },
     { name: 'Terraform', percent: 60, color: '#8bc34a' },
-    { name: 'Python', percent: 35, color: '#f9a825' },
+    { name: 'IoT', percent: 50, color: '#f9a825' },
   ]
 
   constructor() {

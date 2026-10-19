@@ -114,7 +114,7 @@
 }
 
 .track {
-  height: 10px;
+  height: 16px;
   border-radius: 999px;
   background: var(--about-track);
   overflow: hidden;
