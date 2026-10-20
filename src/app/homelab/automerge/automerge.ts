@@ -69,11 +69,6 @@ export class Automerge {
     }
   })
 
-  protected readonly since = computed(() => {
-    const d = this.data()
-    return d ? shortDate(d.since) : ''
-  })
-
   constructor() {
     afterNextRender(async () => {
       if (!isPlatformBrowser(this.platformId)) return

@@ -17,12 +17,10 @@
         <div class="big">
           @if (data(); as d) {
             <b>{{ d.automatic | number }}</b>
-            <span
-              >dependency updates merged automatically since <i class="date">{{ since() }}</i></span
-            >
+            <span>dependency updates merged automatically</span>
             <p class="hand">
               <b>{{ d.byHand | number }}</b>
-              <span>merged by hand in the same time</span>
+              <span>merged by hand since automerge went on</span>
             </p>
           } @else {
             <b>–</b>

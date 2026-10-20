@@ -81,11 +81,6 @@
   text-wrap: balance;
 }
 
-.date {
-  font-style: normal;
-  white-space: nowrap;
-}
-
 .big .hand {
   margin-top: 24px;
 }
