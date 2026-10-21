@@ -149,6 +149,10 @@
   background: var(--c);
 }
 
+.armed:not(.grow) .day i {
+  transform: scaleY(0);
+}
+
 .grow .day i {
   animation: grow 0.6s ease-out backwards;
 }

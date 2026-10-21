@@ -70,10 +70,7 @@
             />
           </div>
           @let cpu = pct(n.cpu);
-          <span class="read"
-            ><span class="v" [class]="cpu.health">{{ cpu.text }}</span
-            ><small>{{ n.cpuRange }}</small></span
-          >
+          <span class="v" [class]="cpu.health">{{ cpu.text }}</span>
         </div>
         <div class="metric">
           <div class="chart">
@@ -87,10 +84,7 @@
             />
           </div>
           @let mem = pct(n.mem);
-          <span class="read"
-            ><span class="v" [class]="mem.health">{{ mem.text }}</span
-            ><small>{{ n.memRange }}</small></span
-          >
+          <span class="v" [class]="mem.health">{{ mem.text }}</span>
         </div>
         @let t = degrees(n);
         <span class="temp" [class]="t.health">{{ t.text }}</span>

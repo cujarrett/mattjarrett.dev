@@ -197,13 +197,6 @@ export function rateLabel(v: number): string {
   return bytesPerSecond(v).replace('.0 ', ' ')
 }
 
-// The low and high a sparkline spans, as a quiet caption under the number beside it.
-export function percentRange(values: (number | null)[]): string {
-  const { lo, hi } = spanOf(values)
-  const [a, b] = [Math.round(lo), Math.round(hi)]
-  return a === b ? `${a}%` : `${a}–${b}%`
-}
-
 // Whole days from a YYYY-MM-DD date to now, counted in the reader's own days.
 export function daysSince(date: string, now: Date): number {
   const [y, m, d] = date.split('-').map(Number)

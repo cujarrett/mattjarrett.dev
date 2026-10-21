@@ -50,7 +50,7 @@
               <div
                 class="fill"
                 [style.background]="skill.color"
-                [style.width]="barsAnimated() ? skill.percent + '%' : '0%'"
+                [style.width]="skill.percent * progress() + '%'"
               ></div>
             </div>
           </div>

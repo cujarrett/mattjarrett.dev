@@ -20,7 +20,6 @@ import {
   interval,
   last,
   niceTicks,
-  percentRange,
   rateLabel,
   spanOf,
   stampOf,
@@ -81,10 +80,8 @@ export class Cluster {
         role: `${role}, ${gibibytes(n.memoryBytes)} GB`,
         cpu: n.cpu,
         cpuLines: [{ values: n.cpu }] satisfies Line[],
-        cpuRange: percentRange(n.cpu),
         mem: n.memory,
         memLines: [{ values: n.memory }] satisfies Line[],
-        memRange: percentRange(n.memory),
         temperatureC: n.temperatureC,
         temperature: n.temperature,
       }

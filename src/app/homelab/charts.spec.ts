@@ -8,7 +8,6 @@ import {
   interval,
   last,
   niceTicks,
-  percentRange,
   rateLabel,
   scrollProgress,
   spanOf,
@@ -151,11 +150,6 @@ describe('homelab chart helpers', () => {
     expect(rateLabel(12_000_000)).toBe('12 MB/s')
     expect(rateLabel(1_500_000)).toBe('1.5 MB/s')
     expect(rateLabel(400_000)).toBe('400 KB/s')
-  })
-
-  it('percentRange rounds the low and high of a series', () => {
-    expect(percentRange([23.4, 31.8, null])).toBe('23–32%')
-    expect(percentRange([44, 44.2])).toBe('44%')
   })
 
   it('scrollProgress runs from most of the chart on screen to the chart centred', () => {

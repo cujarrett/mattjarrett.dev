@@ -135,19 +135,6 @@ h2 {
   height: 44px;
 }
 
-.read {
-  display: grid;
-  justify-items: end;
-  line-height: 1.2;
-}
-
-.read small {
-  font-size: 10px;
-  color: var(--hl-muted);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
 .v,
 .temp {
   text-align: right;

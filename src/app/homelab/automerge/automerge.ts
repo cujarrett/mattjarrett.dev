@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Injector,
   PLATFORM_ID,
   afterNextRender,
   computed,
@@ -25,10 +26,13 @@ export class Automerge {
   private readonly stats = inject(Stats)
   private readonly platformId = inject(PLATFORM_ID)
   private readonly host = inject(ElementRef<HTMLElement>)
+  private readonly injector = inject(Injector)
 
   protected readonly data = signal<AutomergeStats | null>(null)
   protected readonly failed = signal(false)
   protected readonly grow = signal(false)
+  // Bars wait at zero until they grow, so they never show full and then snap back.
+  protected readonly armed = signal(false)
   protected readonly updatedAt = signal<number | null>(null)
 
   protected readonly details = computed(() => {
@@ -74,27 +78,41 @@ export class Automerge {
       if (!isPlatformBrowser(this.platformId)) return
       try {
         const { data, at } = await this.stats.automerge()
+        this.armed.set(this.willAnimate())
         this.data.set(data)
         this.updatedAt.set(at)
       } catch {
         this.failed.set(true)
         return
       }
-      const target: HTMLElement = this.host.nativeElement
-      const win = target.ownerDocument.defaultView
-      if (!win || !('IntersectionObserver' in win)) return
-      if (win.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-      // The bars grow once, the first time the chart scrolls into view.
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((e) => e.isIntersecting)) {
-            observer.disconnect()
-            this.grow.set(true)
-          }
-        },
-        { threshold: 0.5 },
-      )
-      observer.observe(target)
+      // The chart exists only once the data has rendered, so wait for that render.
+      afterNextRender(() => this.growWhenSeen(), { injector: this.injector })
     })
+  }
+
+  private willAnimate(): boolean {
+    const win = this.host.nativeElement.ownerDocument.defaultView
+    return (
+      !!win &&
+      'IntersectionObserver' in win &&
+      !win.matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+  }
+
+  // The bars grow once, when the whole chart is on screen with room below it.
+  private growWhenSeen() {
+    const target: Element | null = this.host.nativeElement.querySelector('.chart')
+    const win = target?.ownerDocument.defaultView
+    if (!target || !win || !this.armed()) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          observer.disconnect()
+          this.grow.set(true)
+        }
+      },
+      { threshold: 0.9, rootMargin: '0px 0px -12% 0px' },
+    )
+    observer.observe(target)
   }
 }

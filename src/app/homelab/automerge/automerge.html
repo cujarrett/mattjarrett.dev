@@ -39,7 +39,7 @@
                 <span>{{ t }}</span>
               }
             </div>
-            <div class="plot" [class.grow]="grow()">
+            <div class="plot" [class.armed]="armed()" [class.grow]="grow()">
               @for (d of c.days; track $index) {
                 <div class="day" [title]="d.title">
                   <i class="auto" [style.height.%]="d.auto"></i>
