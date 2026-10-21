@@ -1,6 +1,10 @@
 <div class="group">
   <h2>Cluster</h2>
-  <app-live-source [updatedAt]="updatedAt()" [failed]="failed()" />
+  <app-live-source
+    [updatedAt]="updatedAt()"
+    [failed]="failed()"
+    [details]="['from Prometheus on the rack above']"
+  />
   <span class="seg" role="group" aria-label="Time range">
     @for (r of ranges; track r) {
       <button type="button" [attr.aria-pressed]="range() === r" (click)="setRange(r)">
