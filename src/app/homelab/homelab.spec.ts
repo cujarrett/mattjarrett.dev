@@ -121,7 +121,7 @@ describe('Automerge', () => {
   it('shows the automatic total and one column per day', async () => {
     const el = await render(Automerge)
     expect(el.querySelector('.big b')?.textContent).toBe('311')
-    expect(el.textContent).toContain('since Sep 6')
+    expect(el.textContent).toContain('merged by hand since automerge went on')
     expect(el.querySelectorAll('.day').length).toBe(2)
     expect(el.querySelector('.live')?.getAttribute('style')).toContain('left: 50%')
   })
