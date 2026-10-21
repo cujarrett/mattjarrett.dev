@@ -21,6 +21,7 @@ const cluster: ClusterStats = {
       role: 'control-plane',
       memoryBytes: 17_002_577_920,
       temperatureC: 44.1,
+      temperature: [40, 44.1],
       cpu: [20, 90],
       memory: [57, 58],
     },
@@ -67,7 +68,7 @@ const fakeStats = {
   automerge: () => Promise.resolve({ data: automerge, at: Date.now() }),
 }
 
-async function render<T>(component: new () => T) {
+async function mount<T>(component: new () => T) {
   await TestBed.configureTestingModule({
     imports: [component],
     providers: [{ provide: Stats, useValue: fakeStats }],
@@ -77,7 +78,22 @@ async function render<T>(component: new () => T) {
   await fixture.whenStable()
   await new Promise((resolve) => setTimeout(resolve))
   fixture.detectChanges()
-  return fixture.nativeElement as HTMLElement
+  return fixture
+}
+
+async function render<T>(component: new () => T) {
+  return (await mount(component)).nativeElement as HTMLElement
+}
+
+// Puts boxes where a test says, since happy-dom has no layout. Elements not listed sit at 0.
+function placeBoxes(boxes: Record<string, { top?: number; left?: number; width?: number }>) {
+  return vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (
+    this: Element,
+  ) {
+    const name = Object.keys(boxes).find((cls) => this.classList.contains(cls))
+    const { top = 0, left = 0, width = 0 } = name ? boxes[name] : {}
+    return { top, left, width, height: 400, bottom: top + 400, right: left + width } as DOMRect
+  })
 }
 
 describe('Homelab', () => {
@@ -104,16 +120,71 @@ describe('Cluster', () => {
     expect(el.querySelector('.metric .v')?.className).toContain('crit')
     expect(el.textContent).toContain('Control, 16 GB')
   })
+
+  it('says how often a point is taken', async () => {
+    const el = await render(Cluster)
+    expect(el.textContent).toContain('a point every')
+  })
+
+  it('shows the number under the pointer, and the latest again once it leaves', async () => {
+    const spy = placeBoxes({ area: { left: 0, width: 100 } })
+    const fixture = await mount(Cluster)
+    const el = fixture.nativeElement as HTMLElement
+    const value = () => el.querySelector('.metric .v')?.textContent
+    expect(value()).toBe('90%')
+
+    const plot = el.querySelector('.metric .area') as HTMLElement
+    plot.dispatchEvent(new MouseEvent('pointermove', { clientX: 0, bubbles: true }))
+    fixture.detectChanges()
+    expect(value()).toBe('20%')
+    expect(el.querySelector('.metric .v')?.className).toContain('good')
+    expect(el.querySelector('.temp')?.textContent).toBe('40.0°C')
+
+    plot.dispatchEvent(new MouseEvent('pointerleave'))
+    fixture.detectChanges()
+    expect(value()).toBe('90%')
+    expect(el.querySelector('.temp')?.textContent).toBe('44.1°C')
+    spy.mockRestore()
+  })
 })
 
 describe('Platform', () => {
-  it('shows the running total, the average and a build waiting to replay', async () => {
+  it('shows the running total, the average and a build still empty below the fold', async () => {
+    const spy = placeBoxes({ race: { top: 5000 } })
     const el = await render(Platform)
     expect(el.querySelector('.big b')?.textContent).toBe('31')
     expect(el.textContent).toContain('GraphQL services')
+    expect(el.textContent).toContain('SQL databases')
     expect(el.textContent).toContain('40')
+    expect(el.textContent).toContain('Auth and connection details included.')
     expect(el.querySelectorAll('.step.done').length).toBe(1)
     expect(el.querySelector('.clock')?.textContent).toContain('0.0')
+    spy.mockRestore()
+  })
+
+  it('grows the build with the scroll position and empties it on the way back up', async () => {
+    const spy = placeBoxes({ race: { top: 5000 } })
+    const fixture = await mount(Platform)
+    const el = fixture.nativeElement as HTMLElement
+    const clock = () => el.querySelector('.clock')?.textContent
+    const scrollTo = async (top: number) => {
+      spy.mockRestore()
+      placeBoxes({ race: { top } })
+      window.dispatchEvent(new Event('scroll'))
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      fixture.detectChanges()
+    }
+
+    // Half way: the chart is 400 tall, so the top sits half a run above where the run starts.
+    const vh = window.innerHeight
+    const run = Math.max(120, vh * 0.5 - 160)
+    await scrollTo(vh - 360 - run / 2)
+    expect(clock()).toContain('20.5')
+    await scrollTo(-1000)
+    expect(clock()).toContain('41.0')
+    await scrollTo(5000)
+    expect(clock()).toContain('0.0')
+    vi.restoreAllMocks()
   })
 })
 

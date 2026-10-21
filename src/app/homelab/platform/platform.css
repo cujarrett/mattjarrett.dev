@@ -9,7 +9,7 @@
   --lp-border: #2e3347;
   --lp-accent: #6366f1;
   --lp-accent-soft: #c7d2fe;
-  --lp-violet: #a78bfa;
+  --lp-aws: #fb923c;
   --lp-success: #22c55e;
   position: relative;
   padding: 64px 0 72px;
@@ -111,15 +111,6 @@
   color: var(--hl-ink-2);
 }
 
-/* The average and the sandbox button share one row, the button in the empty right side. */
-.head-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
 .big .label-row {
   display: flex;
   flex-wrap: wrap;
@@ -134,6 +125,24 @@
   color: var(--hl-ink-2);
 }
 
+/* What the time bought, so the number is not read as just a deploy. */
+.big .claim {
+  max-width: 56ch;
+  text-wrap: balance;
+}
+
+.claim strong {
+  color: var(--hl-ink);
+  font-weight: 600;
+}
+
+/* The way in sits under both columns, once the numbers have made the case. */
+.invite {
+  display: flex;
+  justify-content: center;
+  margin-top: 56px;
+}
+
 .types div {
   display: flex;
   justify-content: space-between;
@@ -142,6 +151,12 @@
   border-bottom: 1px solid var(--hl-border);
   font-size: 14px;
   color: var(--hl-ink-2);
+}
+
+.types small {
+  margin-left: 6px;
+  font-size: 12px;
+  color: var(--hl-muted);
 }
 
 .types b {
@@ -236,7 +251,7 @@ app-kind-icon {
 }
 
 .aws {
-  --c: var(--lp-violet);
+  --c: var(--lp-aws);
 }
 
 .app {

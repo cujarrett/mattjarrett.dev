@@ -9,31 +9,28 @@ import {
   inject,
   signal,
 } from '@angular/core'
-import { DOCUMENT, isPlatformBrowser } from '@angular/common'
+import { DOCUMENT, NgTemplateOutlet, isPlatformBrowser } from '@angular/common'
 import { ClusterRange, ClusterStats, Stats } from '../stats'
 import { LiveSource } from '../live-source'
 import {
-  areaPoints,
   bytesPerSecond,
   daysSince,
   gibibytes,
   health,
+  interval,
   last,
+  niceTicks,
+  percentRange,
+  rateLabel,
   spanOf,
-  sparkPoints,
-  thresholdStops,
+  stampOf,
+  timeTicks,
 } from '../charts'
-
-// One node sparkline: the line coloured by the dashboard thresholds, and the area under it.
-function chart(id: string, values: (number | null)[]) {
-  const points = sparkPoints(values)
-  const span = values.some((v) => v !== null) ? spanOf(values) : { lo: 0, hi: 0 }
-  return { id: `hl-${id}`, points, area: areaPoints(points), stops: thresholdStops(span, 70, 85) }
-}
+import { Limits, Line, Trace } from './trace'
 
 @Component({
   selector: 'app-cluster',
-  imports: [LiveSource],
+  imports: [LiveSource, NgTemplateOutlet, Trace],
   templateUrl: './cluster.html',
   styleUrl: './cluster.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,6 +47,10 @@ export class Cluster {
   protected readonly failed = signal(false)
   protected readonly updatedAt = signal<number | null>(null)
   private readonly now = signal(Date.now())
+  // Sample index under the pointer, shared by every chart so they scrub together.
+  protected readonly cursor = signal<number | null>(null)
+  // Same thresholds as the homelab Grafana dashboards.
+  protected readonly limits: Limits = { warn: 70, crit: 85 }
 
   protected readonly summary = computed(() => {
     const d = this.data()
@@ -74,20 +75,18 @@ export class Cluster {
 
   protected readonly nodes = computed(() =>
     (this.data()?.perNode ?? []).map((n) => {
-      const cpu = last(n.cpu)
-      const mem = last(n.memory)
       const role = n.role === 'control-plane' ? 'Control' : 'Worker'
       return {
         name: n.name,
         role: `${role}, ${gibibytes(n.memoryBytes)} GB`,
-        cpu: Math.round(cpu),
-        cpuHealth: health(cpu, 70, 85),
-        cpuChart: chart(`cpu-${n.name}`, n.cpu),
-        mem: Math.round(mem),
-        memHealth: health(mem, 70, 85),
-        memChart: chart(`mem-${n.name}`, n.memory),
-        temp: n.temperatureC === null ? '–' : `${n.temperatureC.toFixed(1)}°C`,
-        tempHealth: health(n.temperatureC ?? 0, 70, 80),
+        cpu: n.cpu,
+        cpuLines: [{ values: n.cpu }] satisfies Line[],
+        cpuRange: percentRange(n.cpu),
+        mem: n.memory,
+        memLines: [{ values: n.memory }] satisfies Line[],
+        memRange: percentRange(n.memory),
+        temperatureC: n.temperatureC,
+        temperature: n.temperature,
       }
     }),
   )
@@ -96,19 +95,61 @@ export class Cluster {
     const d = this.data()
     if (!d) return null
     const pair = (a: (number | null)[], b: (number | null)[]) => {
-      // Both lines on one scale, so in and out compare honestly.
-      const span = spanOf(a, b)
-      return {
-        a: sparkPoints(a, 44, span),
-        b: sparkPoints(b, 44, span),
-        aArea: areaPoints(sparkPoints(a, 44, span), 44),
-        bArea: areaPoints(sparkPoints(b, 44, span), 44),
-        aNow: bytesPerSecond(last(a)),
-        bNow: bytesPerSecond(last(b)),
-      }
+      const lines: Line[] = [
+        { values: a, tone: 's1' },
+        { values: b, tone: 's2' },
+      ]
+      // Both lines share one scale that starts at zero, so in and out compare honestly.
+      // The top sits above the busiest sample, which keeps its label clear of the line.
+      const { span, ticks } = niceTicks(0, spanOf(a, b).hi * 1.15, 4)
+      const yTicks = ticks.map((value) => ({
+        value,
+        label: value === span.hi ? rateLabel(value) : '',
+      }))
+      return { a, b, lines, span, yTicks }
     }
     return { network: pair(d.network.in, d.network.out), disk: pair(d.disk.read, d.disk.write) }
   })
+
+  protected readonly ticks = computed(() => timeTicks(this.data()?.timestamps ?? []))
+
+  protected readonly stamp = computed(() => {
+    const times = this.data()?.timestamps
+    const i = this.cursor()
+    if (!times || i === null || times[i] === undefined) return ''
+    return stampOf(times[i], times[1] - times[0])
+  })
+
+  protected readonly details = computed(() => {
+    const times = this.data()?.timestamps ?? []
+    const source = 'from Prometheus on the rack above'
+    return [times.length < 2 ? source : `${source}, a point every ${interval(times[1] - times[0])}`]
+  })
+
+  // The number under the cursor, or the latest one when nothing is hovered.
+  private at(values: (number | null)[]): number | null {
+    const i = this.cursor()
+    return i === null ? last(values) : (values[i] ?? null)
+  }
+
+  protected pct(values: (number | null)[]) {
+    const v = this.at(values)
+    if (v === null) return { text: '–', health: 'good' as const }
+    return { text: `${Math.round(v)}%`, health: health(v, this.limits.warn, this.limits.crit) }
+  }
+
+  // The temperature under the cursor, or the current one when nothing is hovered.
+  protected degrees(n: { temperatureC: number | null; temperature: (number | null)[] }) {
+    const i = this.cursor()
+    const v = i === null ? n.temperatureC : (n.temperature[i] ?? null)
+    if (v === null) return { text: '–', health: 'good' as const }
+    return { text: `${v.toFixed(1)}°C`, health: health(v, 70, 80) }
+  }
+
+  protected rate(values: (number | null)[]): string {
+    const v = this.at(values)
+    return v === null ? '–' : bytesPerSecond(v)
+  }
 
   // Every range is kept once loaded, so switching shows numbers at once.
   // at: when the API read the numbers. fetched: when this page last asked.
@@ -152,6 +193,7 @@ export class Cluster {
 
   protected setRange(range: ClusterRange) {
     this.range.set(range)
+    this.cursor.set(null)
     const kept = this.byRange.get(range)
     if (kept) {
       this.data.set(kept.data)

@@ -12,6 +12,7 @@ import {
 } from '@angular/core'
 import { DecimalPipe, isPlatformBrowser } from '@angular/common'
 import { PlatformStats, Stats } from '../stats'
+import { scrollProgress } from '../charts'
 import { Reveal } from '../../shared/reveal'
 import { KindIcon } from '../kind-icon'
 import { LiveSource } from '../live-source'
@@ -33,6 +34,9 @@ const TYPE_NAMES: Record<string, string> = {
   ObjectStorage: 'Storage buckets',
 }
 
+// Both have an in-cluster variant and an AWS one, chosen by the developer.
+const HAS_VARIANTS = new Set(['Cache', 'Sql'])
+
 @Component({
   selector: 'app-platform',
   imports: [DecimalPipe, Reveal, KindIcon, LiveSource, SandboxCta, LaunchpadMark],
@@ -44,23 +48,33 @@ export class Platform {
   private readonly stats = inject(Stats)
   private readonly platformId = inject(PLATFORM_ID)
   private readonly host = inject(ElementRef<HTMLElement>)
+  private readonly injector = inject(Injector)
+  private readonly destroyRef = inject(DestroyRef)
 
   protected readonly data = signal<PlatformStats | null>(null)
   protected readonly failed = signal(false)
   protected readonly updatedAt = signal<number | null>(null)
 
-  // Seconds into the replay.
-  // 0: empty bars, waiting to scroll into view.
-  // null: finished, or motion is off.
-  private readonly t = signal<number | null>(0)
+  // How far the chart has scrolled up the screen, 0 to 1.
+  // The bars grow with it, so scrolling back up empties them again.
+  private readonly progress = signal(0)
+  private still = false
 
-  protected readonly types = computed(() =>
-    (this.data()?.running.byType ?? []).map((r) => ({
+  protected readonly types = computed(() => {
+    const running = this.data()?.running.byType ?? []
+    if (running.length === 0) return []
+    // The API leaves out kinds with nothing running, so these two are added back at zero.
+    // Both are offered in two places, and a missing row would hide that.
+    const missing = [...HAS_VARIANTS]
+      .filter((type) => !running.some((r) => r.type === type))
+      .map((type) => ({ type, count: 0 }))
+    return [...running, ...missing].map((r) => ({
       type: r.type,
       name: TYPE_NAMES[r.type] ?? r.type,
       count: r.count,
-    })),
-  )
+      variants: HAS_VARIANTS.has(r.type),
+    }))
+  })
 
   protected readonly build = computed(() => {
     const ws = this.data()?.workspaces
@@ -68,12 +82,13 @@ export class Platform {
     const total = ws.build.totalSeconds
     // Scaled to the build itself, so the slowest step fills the row.
     const max = Math.max(4, Math.ceil(total / 4) * 4)
-    const t = this.t() ?? total
+    const p = this.progress()
+    const t = p * total
     return {
       clock: t.toFixed(1),
       max,
       ticks: [0, max / 4, max / 2, (3 * max) / 4, max],
-      playing: (this.t() ?? 0) > 0,
+      playing: p > 0 && p < 1,
       now: (t / max) * 100,
       steps: ws.build.steps.map((s) => ({
         ...s,
@@ -84,26 +99,17 @@ export class Platform {
     }
   })
 
-  private frame = 0
-
   constructor() {
-    const destroyRef = inject(DestroyRef)
-    const injector = inject(Injector)
-    // A frame only exists in a browser. The server render has no cancelAnimationFrame.
-    destroyRef.onDestroy(() => this.frame && cancelAnimationFrame(this.frame))
-
     afterNextRender(async () => {
       if (!isPlatformBrowser(this.platformId)) return
+      this.followScroll()
       await this.load()
       // Refreshes each minute while the tab is open, so the running count stays live.
       const doc = this.host.nativeElement.ownerDocument
       const ticker = setInterval(() => {
         if (doc.visibilityState === 'visible') this.load()
       }, 60_000)
-      destroyRef.onDestroy(() => clearInterval(ticker))
-      if (!this.data()) return
-      // The chart only exists once the data has rendered, so wait for that render.
-      afterNextRender(() => this.replayWhenSeen(), { injector })
+      this.destroyRef.onDestroy(() => clearInterval(ticker))
     })
   }
 
@@ -113,43 +119,43 @@ export class Platform {
       this.data.set(data)
       this.updatedAt.set(at)
       this.failed.set(false)
+      // The chart exists only once this render lands, so place its bars from where the page is.
+      afterNextRender(() => this.measure(), { injector: this.injector })
     } catch {
       this.failed.set(true)
     }
   }
 
-  // Replays once, the first time the build scrolls into view.
-  private replayWhenSeen() {
-    const target = this.host.nativeElement.querySelector('.steps')
+  // Slow scrolling is slow, fast is fast. With reduced motion the bars stay full.
+  private followScroll() {
     const win = this.host.nativeElement.ownerDocument.defaultView
-    const still = !win || win.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!target || still || !('IntersectionObserver' in win)) {
-      this.t.set(null)
+    if (!win) return
+    if (win.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.still = true
+      this.progress.set(1)
       return
     }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          observer.disconnect()
-          this.play()
-        }
-      },
-      { threshold: 0.6 },
-    )
-    observer.observe(target)
+    let queued = 0
+    const queue = () => {
+      queued ||= win.requestAnimationFrame(() => {
+        queued = 0
+        this.measure()
+      })
+    }
+    win.addEventListener('scroll', queue, { passive: true })
+    win.addEventListener('resize', queue)
+    this.destroyRef.onDestroy(() => {
+      win.removeEventListener('scroll', queue)
+      win.removeEventListener('resize', queue)
+      win.cancelAnimationFrame(queued)
+    })
   }
 
-  private play() {
-    const ws = this.data()?.workspaces
-    if (!ws) return
-    cancelAnimationFrame(this.frame)
-    const start = performance.now()
-    const step = (now: number) => {
-      const t = Math.min(ws.build.totalSeconds, (now - start) / 1000)
-      this.t.set(t)
-      if (t < ws.build.totalSeconds) this.frame = requestAnimationFrame(step)
-      else this.t.set(null)
-    }
-    this.frame = requestAnimationFrame(step)
+  private measure() {
+    const chart = this.host.nativeElement.querySelector('.race')
+    const win = chart?.ownerDocument.defaultView
+    if (!chart || !win || this.still) return
+    const box = chart.getBoundingClientRect()
+    this.progress.set(scrollProgress(box.top, box.height, win.innerHeight))
   }
 }

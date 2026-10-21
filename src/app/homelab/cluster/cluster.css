@@ -44,20 +44,15 @@ h2 {
 .stats {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  border-block: 1px solid var(--hl-border);
+  gap: 12px;
   margin-bottom: 12px;
 }
 
 .stat {
   display: grid;
-  align-content: start;
+  align-content: space-between;
   gap: 1px;
-  padding: 12px 14px 14px;
-  min-width: 0;
-}
-
-.stat + .stat {
-  border-left: 1px solid var(--hl-border);
+  padding-bottom: 14px;
 }
 
 .label {
@@ -66,6 +61,11 @@ h2 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--hl-muted);
+}
+
+.stat .label {
+  font-size: 10px;
+  letter-spacing: 0.06em;
 }
 
 .value {
@@ -131,46 +131,21 @@ h2 {
   align-items: center;
 }
 
-svg {
-  display: block;
-  width: 100%;
+.chart {
   height: 44px;
 }
 
-polyline {
-  fill: none;
-  stroke-width: 1.5;
-  vector-effect: non-scaling-stroke;
+.read {
+  display: grid;
+  justify-items: end;
+  line-height: 1.2;
 }
 
-/* Grafana-style shading under each line. */
-polygon.area {
-  fill-opacity: 0.18;
-  stroke: none;
-}
-
-polygon.fade {
-  stroke: none;
-}
-
-polygon.s1 {
-  fill: var(--hl-s1);
-}
-
-polygon.s2 {
-  fill: var(--hl-s2);
-}
-
-stop.good {
-  stop-color: var(--hl-good);
-}
-
-stop.warn {
-  stop-color: var(--hl-warn);
-}
-
-stop.crit {
-  stop-color: var(--hl-crit);
+.read small {
+  font-size: 10px;
+  color: var(--hl-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .v,
@@ -178,6 +153,26 @@ stop.crit {
   text-align: right;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+.row.axis {
+  border-top: 0;
+  padding-block: 0 2px;
+}
+
+.axis-x {
+  position: relative;
+  height: 14px;
+  font-size: 10px;
+  color: var(--hl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.axis-x span {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .right {
@@ -208,6 +203,10 @@ span.crit {
   gap: 6px;
 }
 
+.io .axis-x {
+  margin-top: -2px;
+}
+
 .io-head {
   display: flex;
   flex-wrap: wrap;
@@ -220,18 +219,6 @@ span.crit {
   gap: 14px;
   font-size: 13px;
   color: var(--hl-ink-2);
-}
-
-.io svg {
-  height: 44px;
-}
-
-polyline.s1 {
-  stroke: var(--hl-s1);
-}
-
-polyline.s2 {
-  stroke: var(--hl-s2);
 }
 
 .io-vals .s1::before,
@@ -254,14 +241,6 @@ polyline.s2 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .stat:nth-child(4) {
-    border-left: 0;
-  }
-
-  .stat:nth-child(n + 4) {
-    border-top: 1px solid var(--hl-border);
-  }
-
   .grid {
     grid-template-columns: 1fr;
   }
@@ -272,24 +251,17 @@ polyline.s2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .stat:nth-child(odd) {
-    border-left: 0;
-  }
-
-  .stat:nth-child(4) {
-    border-left: 1px solid var(--hl-border);
-  }
-
-  .stat:nth-child(n + 3) {
-    border-top: 1px solid var(--hl-border);
-  }
-
   .row {
     grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1fr);
     gap: 10px;
   }
 
   .row > :last-child {
+    display: none;
+  }
+
+  /* Narrow charts have room for every other time label. */
+  .row.axis .axis-x span:nth-child(even) {
     display: none;
   }
 }

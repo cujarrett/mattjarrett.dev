@@ -1,0 +1,165 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.plot {
+  height: 100%;
+}
+
+.area {
+  position: relative;
+  height: 100%;
+  touch-action: pan-y;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+polyline {
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+polygon {
+  stroke: none;
+}
+
+line.grid {
+  stroke: var(--hl-border);
+  stroke-width: 1;
+  stroke-dasharray: 1 3;
+  vector-effect: non-scaling-stroke;
+}
+
+stop.good {
+  stop-color: var(--hl-good);
+}
+
+stop.warn {
+  stop-color: var(--hl-warn);
+}
+
+stop.crit {
+  stop-color: var(--hl-crit);
+}
+
+stop.s1 {
+  stop-color: var(--hl-s1);
+}
+
+stop.s2 {
+  stop-color: var(--hl-s2);
+}
+
+i.good,
+i.warn,
+i.crit,
+i.s1,
+i.s2 {
+  color: var(--hl-s1);
+}
+
+i.good {
+  color: var(--hl-good);
+}
+
+i.warn {
+  color: var(--hl-warn);
+}
+
+i.crit {
+  color: var(--hl-crit);
+}
+
+i.s2 {
+  color: var(--hl-s2);
+}
+
+.head,
+.mark {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: currentColor;
+  pointer-events: none;
+}
+
+/* A ring leaves the latest sample on the same 2s beat as the live dot. */
+.head::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  animation: ring 2s ease-out infinite;
+}
+
+.mark {
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  box-shadow: 0 0 0 2px #1d0f2b;
+}
+
+.cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  margin-left: -0.5px;
+  background: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+.stamp {
+  position: absolute;
+  top: calc(100% + 3px);
+  z-index: 2;
+  transform: translateX(-50%);
+  padding: 2px 7px;
+  border: 1px solid var(--hl-border);
+  border-radius: 4px;
+  background: #1d0f2b;
+  color: var(--hl-ink);
+  font: 600 11px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ylabel {
+  position: absolute;
+  left: 0;
+  margin-top: 2px;
+  color: var(--hl-muted);
+  font: 10px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+@keyframes ring {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head::after {
+    animation: none;
+    opacity: 0;
+  }
+}

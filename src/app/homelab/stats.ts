@@ -17,6 +17,7 @@ export interface ClusterStats {
     role: string
     memoryBytes: number
     temperatureC: number | null
+    temperature: (number | null)[]
     cpu: (number | null)[]
     memory: (number | null)[]
   }[]

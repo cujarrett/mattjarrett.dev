@@ -1,0 +1,76 @@
+<div class="plot">
+  <div
+    class="area"
+    (pointermove)="point($event)"
+    (pointerdown)="point($event)"
+    (pointerleave)="leave($event)"
+    (pointercancel)="leave($event)"
+  >
+    <svg [attr.viewBox]="'0 0 100 ' + height" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        @for (l of layers(); track l.id) {
+          <linearGradient
+            [attr.id]="l.id"
+            gradientUnits="userSpaceOnUse"
+            x1="0"
+            y1="0"
+            x2="0"
+            [attr.y2]="height"
+          >
+            @for (s of l.stops; track $index) {
+              <stop [attr.offset]="s.offset" [class]="s.tone" />
+            }
+          </linearGradient>
+          <!-- Same colours, fading out toward the bottom like a Grafana fill. -->
+          <linearGradient
+            [attr.id]="l.id + '-fill'"
+            gradientUnits="userSpaceOnUse"
+            x1="0"
+            y1="0"
+            x2="0"
+            [attr.y2]="height"
+          >
+            @for (s of l.stops; track $index) {
+              <stop
+                [attr.offset]="s.offset"
+                [attr.stop-opacity]="0.45 * (1 - s.offset)"
+                [class]="s.tone"
+              />
+            }
+          </linearGradient>
+        }
+      </defs>
+      @for (t of ticks(); track t.left) {
+        <line class="grid" [attr.x1]="t.left" [attr.x2]="t.left" y1="0" [attr.y2]="height" />
+      }
+      @for (y of yAxis(); track y.y) {
+        <line class="grid" x1="0" x2="100" [attr.y1]="y.y" [attr.y2]="y.y" />
+      }
+      @for (l of layers(); track l.id) {
+        <polygon [attr.points]="l.area" [attr.fill]="'url(#' + l.id + '-fill)'" />
+        <polyline [attr.points]="l.points" [attr.stroke]="'url(#' + l.id + ')'" />
+      }
+    </svg>
+    @for (y of yAxis(); track y.y) {
+      @if (y.label) {
+        <span class="ylabel" [style.top.%]="y.top">{{ y.label }}</span>
+      }
+    }
+    @for (l of layers(); track l.id) {
+      @if (l.head; as h) {
+        <i class="head" [class]="h.tone" [style.left.%]="h.x" [style.top.%]="h.y"></i>
+      }
+    }
+    @if (at(); as c) {
+      <i class="cursor" [style.left.%]="c.x"></i>
+      @for (m of c.marks; track $index) {
+        <i class="mark" [class]="m.tone" [style.left.%]="c.x" [style.top.%]="m.y"></i>
+      }
+      @if (active()) {
+        <span class="stamp" [style.left]="'clamp(48px, ' + c.x + '%, calc(100% - 48px))'">{{
+          stamp()
+        }}</span>
+      }
+    }
+  </div>
+</div>

@@ -33,7 +33,11 @@
         <div class="types">
           @for (t of types(); track t.name) {
             <div>
-              <span><app-kind-icon [kind]="t.type" />{{ t.name }}</span
+              <span
+                ><app-kind-icon [kind]="t.type" />{{ t.name }}
+                @if (t.variants) {
+                  <small>in cluster or AWS</small>
+                }</span
               ><b>{{ t.count }}</b>
             </div>
           }
@@ -41,24 +45,24 @@
       </div>
 
       <div class="col">
-        <div class="head-row">
-          @if (data()?.workspaces; as ws) {
-            <div class="big">
-              <b>{{ ws.averageSeconds | number: '1.0-0' }}<small>s</small></b>
-              <span>Average workspace, create to ready</span>
-            </div>
-          } @else {
-            <div class="big">
-              <b>–</b>
-              <span>{{
-                failed()
-                  ? 'Live stats are unavailable right now'
-                  : 'Average workspace, create to ready'
-              }}</span>
-            </div>
-          }
-          <app-sandbox-cta />
-        </div>
+        @if (data()?.workspaces; as ws) {
+          <div class="big">
+            <b>{{ ws.averageSeconds | number: '1.0-0' }}<small>seconds</small></b>
+            <span class="claim"
+              ><strong>Average time, request to ready.</strong> Auth and connection details
+              included.</span
+            >
+          </div>
+        } @else {
+          <div class="big">
+            <b>–</b>
+            <span class="claim">{{
+              failed()
+                ? 'Live stats are unavailable right now'
+                : 'Average time, request to ready. Auth and connection details included.'
+            }}</span>
+          </div>
+        }
 
         @if (build(); as b) {
           <div class="race">
@@ -95,11 +99,15 @@
             <div class="key">
               <span class="pi">In Cluster</span><span class="aws">In AWS</span
               ><span class="app">App serving traffic</span
-              ><span class="clock">{{ b.clock }}<small>s</small></span>
+              ><span class="clock">{{ b.clock }}<small>seconds</small></span>
             </div>
           </div>
         }
       </div>
+    </div>
+
+    <div class="invite" appReveal>
+      <app-sandbox-cta />
     </div>
   </div>
 </section>

@@ -1,10 +1,6 @@
 <div class="group">
   <h2>Cluster</h2>
-  <app-live-source
-    [updatedAt]="updatedAt()"
-    [failed]="failed()"
-    [details]="['from Prometheus on the rack above']"
-  />
+  <app-live-source [updatedAt]="updatedAt()" [failed]="failed()" [details]="details()" />
   <span class="seg" role="group" aria-label="Time range">
     @for (r of ranges; track r) {
       <button type="button" [attr.aria-pressed]="range() === r" (click)="setRange(r)">
@@ -16,33 +12,33 @@
 
 <div class="stats">
   @let s = summary();
-  <div class="stat">
+  <div class="stat panel">
     <span class="label">Availability, 30d</span>
     <span class="value nines">{{ s?.availability ?? '–' }}</span>
   </div>
-  <div class="stat">
+  <div class="stat panel">
     <span class="label">Since power outage</span>
     <span class="value"
       >{{ s?.power?.value ?? '–' }}<small>{{ s?.power?.unit ?? 'days' }}</small></span
     >
   </div>
-  <div class="stat">
+  <div class="stat panel">
     <span class="label">Since internet outage</span>
     <span class="value"
       >{{ s?.internet?.value ?? '–' }}<small>{{ s?.internet?.unit ?? 'days' }}</small></span
     >
   </div>
-  <div class="stat">
+  <div class="stat panel">
     <span class="label">Nodes</span>
     <span class="value"
       >{{ s?.nodes?.ready ?? '–' }}<small>of {{ s?.nodes?.total ?? 4 }}</small></span
     >
   </div>
-  <div class="stat">
+  <div class="stat panel">
     <span class="label">Running pods</span>
     <span class="value">{{ s?.pods ?? '–' }}</span>
   </div>
-  <div class="stat">
+  <div class="stat panel">
     <span class="label">Apps in sync</span>
     <span class="value"
       >{{ s?.apps?.synced ?? '–' }}<small>of {{ s?.apps?.total ?? '–' }}</small></span
@@ -63,92 +59,49 @@
           ><span>{{ n.role }}</span>
         </div>
         <div class="metric">
-          @let cpuC = n.cpuChart;
-          <svg viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <linearGradient
-                [attr.id]="cpuC.id"
-                gradientUnits="userSpaceOnUse"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="30"
-              >
-                @for (s of cpuC.stops; track $index) {
-                  <stop [attr.offset]="s.offset" [class]="s.health" />
-                }
-              </linearGradient>
-              <!-- Same colours, fading out toward the bottom like a Grafana fill. -->
-              <linearGradient
-                [attr.id]="cpuC.id + '-fill'"
-                gradientUnits="userSpaceOnUse"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="30"
-              >
-                @for (s of cpuC.stops; track $index) {
-                  <stop
-                    [attr.offset]="s.offset"
-                    [attr.stop-opacity]="0.45 * (1 - s.offset)"
-                    [class]="s.health"
-                  />
-                }
-              </linearGradient>
-            </defs>
-            <polygon
-              class="fade"
-              [attr.points]="cpuC.area"
-              [attr.fill]="'url(#' + cpuC.id + '-fill)'"
+          <div class="chart">
+            <app-trace
+              [lines]="n.cpuLines"
+              [limits]="limits"
+              [ticks]="ticks()"
+              [cursor]="cursor()"
+              [stamp]="stamp()"
+              (scrub)="cursor.set($event)"
             />
-            <polyline [attr.points]="cpuC.points" [attr.stroke]="'url(#' + cpuC.id + ')'" />
-          </svg>
-          <span class="v" [class]="n.cpuHealth">{{ n.cpu }}%</span>
+          </div>
+          @let cpu = pct(n.cpu);
+          <span class="read"
+            ><span class="v" [class]="cpu.health">{{ cpu.text }}</span
+            ><small>{{ n.cpuRange }}</small></span
+          >
         </div>
         <div class="metric">
-          @let memC = n.memChart;
-          <svg viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <linearGradient
-                [attr.id]="memC.id"
-                gradientUnits="userSpaceOnUse"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="30"
-              >
-                @for (s of memC.stops; track $index) {
-                  <stop [attr.offset]="s.offset" [class]="s.health" />
-                }
-              </linearGradient>
-              <!-- Same colours, fading out toward the bottom like a Grafana fill. -->
-              <linearGradient
-                [attr.id]="memC.id + '-fill'"
-                gradientUnits="userSpaceOnUse"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="30"
-              >
-                @for (s of memC.stops; track $index) {
-                  <stop
-                    [attr.offset]="s.offset"
-                    [attr.stop-opacity]="0.45 * (1 - s.offset)"
-                    [class]="s.health"
-                  />
-                }
-              </linearGradient>
-            </defs>
-            <polygon
-              class="fade"
-              [attr.points]="memC.area"
-              [attr.fill]="'url(#' + memC.id + '-fill)'"
+          <div class="chart">
+            <app-trace
+              [lines]="n.memLines"
+              [limits]="limits"
+              [ticks]="ticks()"
+              [cursor]="cursor()"
+              [stamp]="stamp()"
+              (scrub)="cursor.set($event)"
             />
-            <polyline [attr.points]="memC.points" [attr.stroke]="'url(#' + memC.id + ')'" />
-          </svg>
-          <span class="v" [class]="n.memHealth">{{ n.mem }}%</span>
+          </div>
+          @let mem = pct(n.mem);
+          <span class="read"
+            ><span class="v" [class]="mem.health">{{ mem.text }}</span
+            ><small>{{ n.memRange }}</small></span
+          >
         </div>
-        <span class="temp" [class]="n.tempHealth">{{ n.temp }}</span>
+        @let t = degrees(n);
+        <span class="temp" [class]="t.health">{{ t.text }}</span>
+      </div>
+    }
+    @if (nodes().length) {
+      <div class="row axis">
+        <span></span>
+        <div class="metric"><ng-container *ngTemplateOutlet="axis" /><span></span></div>
+        <div class="metric"><ng-container *ngTemplateOutlet="axis" /><span></span></div>
+        <span></span>
       </div>
     }
   </div>
@@ -159,36 +112,61 @@
         <span class="label">Network</span>
         <span class="io-vals"
           ><span class="s1"
-            >In <b>{{ ioNow?.network?.aNow ?? '–' }}</b></span
+            >In <b>{{ ioNow ? rate(ioNow.network.a) : '–' }}</b></span
           ><span class="s2"
-            >Out <b>{{ ioNow?.network?.bNow ?? '–' }}</b></span
+            >Out <b>{{ ioNow ? rate(ioNow.network.b) : '–' }}</b></span
           ></span
         >
       </div>
-      <svg viewBox="0 0 100 44" preserveAspectRatio="none" aria-hidden="true">
-        <polygon [attr.points]="ioNow?.network?.aArea ?? ''" class="area s1" />
-        <polygon [attr.points]="ioNow?.network?.bArea ?? ''" class="area s2" />
-        <polyline [attr.points]="ioNow?.network?.a ?? ''" class="s1" />
-        <polyline [attr.points]="ioNow?.network?.b ?? ''" class="s2" />
-      </svg>
+      <div class="chart">
+        @if (ioNow) {
+          <app-trace
+            [lines]="ioNow.network.lines"
+            [span]="ioNow.network.span"
+            [yTicks]="ioNow.network.yTicks"
+            [ticks]="ticks()"
+            [cursor]="cursor()"
+            [stamp]="stamp()"
+            (scrub)="cursor.set($event)"
+          />
+        }
+      </div>
+      <ng-container *ngTemplateOutlet="axis" />
     </div>
     <div class="panel io">
       <div class="io-head">
         <span class="label">Disk</span>
         <span class="io-vals"
           ><span class="s1"
-            >Read <b>{{ ioNow?.disk?.aNow ?? '–' }}</b></span
+            >Read <b>{{ ioNow ? rate(ioNow.disk.a) : '–' }}</b></span
           ><span class="s2"
-            >Write <b>{{ ioNow?.disk?.bNow ?? '–' }}</b></span
+            >Write <b>{{ ioNow ? rate(ioNow.disk.b) : '–' }}</b></span
           ></span
         >
       </div>
-      <svg viewBox="0 0 100 44" preserveAspectRatio="none" aria-hidden="true">
-        <polygon [attr.points]="ioNow?.disk?.aArea ?? ''" class="area s1" />
-        <polygon [attr.points]="ioNow?.disk?.bArea ?? ''" class="area s2" />
-        <polyline [attr.points]="ioNow?.disk?.a ?? ''" class="s1" />
-        <polyline [attr.points]="ioNow?.disk?.b ?? ''" class="s2" />
-      </svg>
+      <div class="chart">
+        @if (ioNow) {
+          <app-trace
+            [lines]="ioNow.disk.lines"
+            [span]="ioNow.disk.span"
+            [yTicks]="ioNow.disk.yTicks"
+            [ticks]="ticks()"
+            [cursor]="cursor()"
+            [stamp]="stamp()"
+            (scrub)="cursor.set($event)"
+          />
+        }
+      </div>
+      <ng-container *ngTemplateOutlet="axis" />
     </div>
   </div>
 </div>
+
+<!-- Time labels at the same positions as the faint vertical grid in each chart. -->
+<ng-template #axis>
+  <div class="axis-x" aria-hidden="true">
+    @for (t of ticks(); track t.left) {
+      <span [style.left.%]="t.left">{{ t.label }}</span>
+    }
+  </div>
+</ng-template>
