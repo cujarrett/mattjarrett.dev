@@ -47,10 +47,9 @@
       <div class="col">
         @if (data()?.workspaces; as ws) {
           <div class="big">
-            <b>{{ ws.averageSeconds | number: '1.0-0' }}<small>seconds</small></b>
+            <b>{{ ws.build.totalSeconds | number: '1.0-0' }}<small>seconds</small></b>
             <span class="claim"
-              ><strong>Average time, request to ready.</strong> Auth and connection details
-              included.</span
+              ><strong>Time, request to ready.</strong> Auth and connection details included.</span
             >
           </div>
         } @else {
@@ -59,7 +58,7 @@
             <span class="claim">{{
               failed()
                 ? 'Live stats are unavailable right now'
-                : 'Average time, request to ready. Auth and connection details included.'
+                : 'Time, request to ready. Auth and connection details included.'
             }}</span>
           </div>
         }
@@ -98,8 +97,7 @@
             </div>
             <div class="key">
               <span class="pi">In Cluster</span><span class="aws">In AWS</span
-              ><span class="app">App serving traffic</span
-              ><span class="clock">{{ b.clock }}<small>seconds</small></span>
+              ><span class="app">App serving traffic</span>
             </div>
           </div>
         }

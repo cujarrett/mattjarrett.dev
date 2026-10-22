@@ -181,20 +181,6 @@ app-kind-icon {
   gap: 10px;
 }
 
-.key .clock {
-  margin-left: auto;
-  color: var(--hl-ink);
-  font-size: 24px;
-  font-weight: 300;
-  font-variant-numeric: tabular-nums;
-}
-
-.key .clock small {
-  margin-left: 4px;
-  font-size: 14px;
-  color: var(--hl-muted);
-}
-
 .steps {
   position: relative;
   display: grid;
@@ -305,10 +291,6 @@ app-kind-icon {
   margin-right: 6px;
   border-radius: 2px;
   background: var(--c);
-}
-
-.key .clock::before {
-  display: none;
 }
 
 @media (max-width: 900px) {

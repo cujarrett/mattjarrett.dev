@@ -85,7 +85,6 @@ export class Platform {
     const p = this.progress()
     const t = p * total
     return {
-      clock: t.toFixed(1),
       max,
       ticks: [0, max / 4, max / 2, (3 * max) / 4, max],
       playing: p > 0 && p < 1,

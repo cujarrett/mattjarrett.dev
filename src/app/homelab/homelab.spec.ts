@@ -40,7 +40,6 @@ const platform: PlatformStats = {
   },
   workspaces: {
     count: 30,
-    averageSeconds: 39.8,
     build: {
       totalSeconds: 41,
       steps: [
@@ -149,16 +148,15 @@ describe('Cluster', () => {
 })
 
 describe('Platform', () => {
-  it('shows the running total, the average and a build still empty below the fold', async () => {
+  it('shows the running total, the replayed build time and a build still empty below the fold', async () => {
     const spy = placeBoxes({ race: { top: 5000 } })
     const el = await render(Platform)
     expect(el.querySelector('.big b')?.textContent).toBe('31')
     expect(el.textContent).toContain('GraphQL services')
     expect(el.textContent).toContain('SQL databases')
-    expect(el.textContent).toContain('40')
+    expect(el.querySelectorAll('.big b')[1]?.textContent).toContain('41')
     expect(el.textContent).toContain('Auth and connection details included.')
     expect(el.querySelectorAll('.step.done').length).toBe(1)
-    expect(el.querySelector('.clock')?.textContent).toContain('0.0')
     spy.mockRestore()
   })
 
@@ -166,7 +164,9 @@ describe('Platform', () => {
     const spy = placeBoxes({ race: { top: 5000 } })
     const fixture = await mount(Platform)
     const el = fixture.nativeElement as HTMLElement
-    const clock = () => el.querySelector('.clock')?.textContent
+    // The slowest step is 41 s on a 44 s axis.
+    const last = () =>
+      parseFloat((el.querySelector('.step:last-child .bar') as HTMLElement).style.width)
     const scrollTo = async (top: number) => {
       spy.mockRestore()
       placeBoxes({ race: { top } })
@@ -179,11 +179,11 @@ describe('Platform', () => {
     const vh = window.innerHeight
     const run = Math.max(120, vh * 0.5 - 160)
     await scrollTo(vh - 360 - run / 2)
-    expect(clock()).toContain('20.5')
+    expect(last()).toBeCloseTo((20.5 / 44) * 100)
     await scrollTo(-1000)
-    expect(clock()).toContain('41.0')
+    expect(last()).toBeCloseTo((41 / 44) * 100)
     await scrollTo(5000)
-    expect(clock()).toContain('0.0')
+    expect(last()).toBe(0)
     vi.restoreAllMocks()
   })
 })

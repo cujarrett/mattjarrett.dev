@@ -36,7 +36,6 @@ export interface PlatformStats {
   running: { total: number; byType: { type: string; count: number }[] }
   workspaces: {
     count: number
-    averageSeconds: number
     build: { totalSeconds: number; steps: BuildStep[] }
   } | null
 }
