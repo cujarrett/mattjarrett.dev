@@ -56,5 +56,23 @@ export class Portfolio {
       url: 'https://marketplace.visualstudio.com/items?itemName=cujarrett.gotemplate-yaml',
       img: 'portfolio/gotemplate-yaml.png',
     },
+    {
+      title: "I Pub Sub'd my Sump Pump",
+      description: 'Power of platform engineering',
+      url: 'https://blog.mattjarrett.dev/i-pub-subd-my-sump-pump/',
+      img: 'portfolio/pub-sub-sump-pump.png',
+    },
+    {
+      title: 'Launchpad',
+      description: 'You declare what you want. The platform puts it in the air.',
+      url: 'https://launchpad.mattjarrett.dev/',
+      img: 'portfolio/launchpad.png',
+    },
+    {
+      title: 'temporal-controller',
+      description: 'Temporal namespaces as Kubernetes resources',
+      url: 'https://github.com/cujarrett/temporal-controller',
+      img: 'portfolio/temporal-controller.png',
+    },
   ])
 }
