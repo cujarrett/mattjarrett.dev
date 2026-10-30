@@ -19,19 +19,22 @@ import { LiveSource } from '../live-source'
 import { SandboxCta } from './sandbox-cta'
 import { LaunchpadMark } from './launchpad-mark'
 
-const TYPE_NAMES: Record<string, string> = {
-  Api: 'APIs',
-  Spa: 'Web apps',
-  GraphApi: 'GraphQL services',
-  ManagedSecret: 'Secrets',
-  Wordpress: 'WordPress sites',
-  FederatedGraph: 'Federated graphs',
-  Cache: 'Caches',
-  NoSql: 'NoSQL tables',
-  Topic: 'Event topics',
-  Subscription: 'Subscriptions',
-  Sql: 'SQL databases',
-  ObjectStorage: 'Storage buckets',
+const PLATFORM_REPO = 'https://github.com/cujarrett/homelab/tree/main/platform/'
+
+// dir: the kind's folder under platform/ in the homelab repo.
+const TYPES: Record<string, { name: string; dir: string }> = {
+  Api: { name: 'APIs', dir: 'api' },
+  Spa: { name: 'Web apps', dir: 'spa' },
+  GraphApi: { name: 'GraphQL services', dir: 'graph-api' },
+  ManagedSecret: { name: 'Secrets', dir: 'managed-secret' },
+  Wordpress: { name: 'WordPress sites', dir: 'wordpress' },
+  FederatedGraph: { name: 'Federated graphs', dir: 'federated-graph' },
+  Cache: { name: 'Caches', dir: 'cache' },
+  NoSql: { name: 'NoSQL tables', dir: 'nosql' },
+  Topic: { name: 'Event topics', dir: 'topic' },
+  Subscription: { name: 'Subscriptions', dir: 'subscription' },
+  Sql: { name: 'SQL databases', dir: 'sql' },
+  ObjectStorage: { name: 'Storage buckets', dir: 'object-storage' },
 }
 
 // Both have an in-cluster variant and an AWS one, chosen by the developer.
@@ -70,7 +73,9 @@ export class Platform {
       .map((type) => ({ type, count: 0 }))
     return [...running, ...missing].map((r) => ({
       type: r.type,
-      name: TYPE_NAMES[r.type] ?? r.type,
+      name: TYPES[r.type]?.name ?? r.type,
+      // A kind missing from the list links to the platform folder itself.
+      href: PLATFORM_REPO + (TYPES[r.type]?.dir ?? ''),
       count: r.count,
       variants: HAS_VARIANTS.has(r.type),
     }))

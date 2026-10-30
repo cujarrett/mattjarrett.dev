@@ -32,14 +32,14 @@
         </div>
         <div class="types">
           @for (t of types(); track t.name) {
-            <div>
+            <a [href]="t.href" target="_blank" rel="noopener noreferrer">
               <span
                 ><app-kind-icon [kind]="t.type" />{{ t.name }}
                 @if (t.variants) {
                   <small>in cluster or AWS</small>
                 }</span
               ><b>{{ t.count }}</b>
-            </div>
+            </a>
           }
         </div>
       </div>

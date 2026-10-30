@@ -143,7 +143,7 @@
   margin-top: 56px;
 }
 
-.types div {
+.types a {
   display: flex;
   justify-content: space-between;
   gap: 8px;
@@ -151,6 +151,11 @@
   border-bottom: 1px solid var(--hl-border);
   font-size: 14px;
   color: var(--hl-ink-2);
+}
+
+.types a:hover,
+.types a:focus-visible {
+  color: var(--lp-accent-soft);
 }
 
 .types small {
