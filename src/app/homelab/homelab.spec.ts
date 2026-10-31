@@ -175,10 +175,9 @@ describe('Platform', () => {
       fixture.detectChanges()
     }
 
-    // Half way: the chart is 400 tall, so the top sits half a run above where the run starts.
+    // Half way: the chart is 400 tall, so the top sits midway between 0.9 vh and 0.35 vh - 200.
     const vh = window.innerHeight
-    const run = Math.max(120, vh * 0.5 - 160)
-    await scrollTo(vh - 360 - run / 2)
+    await scrollTo(vh * 0.625 - 100)
     expect(last()).toBeCloseTo((20.5 / 44) * 100)
     await scrollTo(-1000)
     expect(last()).toBeCloseTo((41 / 44) * 100)

@@ -152,10 +152,11 @@ describe('homelab chart helpers', () => {
     expect(rateLabel(400_000)).toBe('400 KB/s')
   })
 
-  it('scrollProgress runs from most of the chart on screen to the chart centred', () => {
-    expect(scrollProgress(640, 400, 1000)).toBe(0)
-    expect(scrollProgress(470, 400, 1000)).toBe(0.5)
-    expect(scrollProgress(300, 400, 1000)).toBe(1)
+  it('scrollProgress eases from the chart peeking in to its middle above centre', () => {
+    expect(scrollProgress(900, 400, 1000)).toBe(0)
+    expect(scrollProgress(712.5, 400, 1000)).toBe(0.15625)
+    expect(scrollProgress(525, 400, 1000)).toBe(0.5)
+    expect(scrollProgress(150, 400, 1000)).toBe(1)
     expect(scrollProgress(2000, 400, 1000)).toBe(0)
     expect(scrollProgress(-500, 400, 1000)).toBe(1)
   })

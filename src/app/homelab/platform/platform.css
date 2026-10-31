@@ -269,6 +269,17 @@ app-kind-icon {
   background: rgba(255, 255, 255, 0.5);
 }
 
+/* Glides over the gap between mouse wheel steps. */
+@media (prefers-reduced-motion: no-preference) {
+  .bar {
+    transition: width 200ms ease-out;
+  }
+
+  .now {
+    transition: left 200ms ease-out;
+  }
+}
+
 .axis {
   font-size: 11px;
   color: var(--hl-muted);

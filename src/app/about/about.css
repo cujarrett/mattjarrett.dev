@@ -126,6 +126,13 @@
   border-radius: 999px;
 }
 
+/* Glides over the gap between mouse wheel steps. */
+@media (prefers-reduced-motion: no-preference) {
+  .fill {
+    transition: width 200ms ease-out;
+  }
+}
+
 /* More info links */
 .more-about-info {
   margin-top: 20px;

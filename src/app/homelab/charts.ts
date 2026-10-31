@@ -161,12 +161,14 @@ export function niceTicks(lo: number, hi: number, count = 3): Axis {
   }
 }
 
-// How far a chart has come up the screen, 0 to 1. It starts once nine tenths of the chart is on
-// screen, so the long bars are already in view, and finishes with the chart centred.
+// How far a chart has come up the screen, 0 to 1, eased at both ends.
+// Start: the chart's top edge is a tenth of the way up the screen.
+// End: the chart's middle sits a third of the way down the screen.
 export function scrollProgress(top: number, height: number, viewport: number): number {
-  const start = viewport - height * 0.9
-  const run = Math.max(height * 0.3, viewport * 0.5 - height * 0.4)
-  return Math.min(1, Math.max(0, (start - top) / run))
+  const start = viewport * 0.9
+  const end = viewport * 0.35 - height / 2
+  const p = Math.min(1, Math.max(0, (start - top) / (start - end)))
+  return p * p * (3 - 2 * p)
 }
 
 export function ago(ms: number): string {
