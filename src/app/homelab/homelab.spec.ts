@@ -148,42 +148,19 @@ describe('Cluster', () => {
 })
 
 describe('Platform', () => {
-  it('shows the running total, the replayed build time and a build still empty below the fold', async () => {
-    const spy = placeBoxes({ race: { top: 5000 } })
+  it('shows the running total, the replayed build time and each step sized for the replay', async () => {
     const el = await render(Platform)
     expect(el.querySelector('.big b')?.textContent).toBe('31')
     expect(el.textContent).toContain('GraphQL services')
     expect(el.textContent).toContain('SQL databases')
     expect(el.querySelectorAll('.big b')[1]?.textContent).toContain('41')
     expect(el.textContent).toContain('Auth and connection details included.')
-    expect(el.querySelectorAll('.step.done').length).toBe(1)
-    spy.mockRestore()
-  })
-
-  it('grows the build with the scroll position and empties it on the way back up', async () => {
-    const spy = placeBoxes({ race: { top: 5000 } })
-    const fixture = await mount(Platform)
-    const el = fixture.nativeElement as HTMLElement
     // The slowest step is 41 s on a 44 s axis.
-    const last = () =>
-      parseFloat((el.querySelector('.step:last-child .bar') as HTMLElement).style.width)
-    const scrollTo = async (top: number) => {
-      spy.mockRestore()
-      placeBoxes({ race: { top } })
-      window.dispatchEvent(new Event('scroll'))
-      await new Promise((resolve) => setTimeout(resolve, 50))
-      fixture.detectChanges()
-    }
-
-    // Half way: the chart is 400 tall, so the top sits midway between 0.9 vh and 0.35 vh - 200.
-    const vh = window.innerHeight
-    await scrollTo(vh * 0.625 - 100)
-    expect(last()).toBeCloseTo((20.5 / 44) * 100)
-    await scrollTo(-1000)
-    expect(last()).toBeCloseTo((41 / 44) * 100)
-    await scrollTo(5000)
-    expect(last()).toBe(0)
-    vi.restoreAllMocks()
+    const step = el.querySelector('.step:last-child') as HTMLElement
+    expect(step.style.getPropertyValue('--shown')).toBe('41')
+    expect(parseFloat((step.querySelector('.bar') as HTMLElement).style.width)).toBeCloseTo(
+      (41 / 44) * 100,
+    )
   })
 })
 

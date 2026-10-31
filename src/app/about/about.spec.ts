@@ -21,17 +21,6 @@ describe('About', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should keep the skill bars empty while they are below the fold', async () => {
-    const spy = vi
-      .spyOn(Element.prototype, 'getBoundingClientRect')
-      .mockReturnValue({ top: 5000, height: 300, bottom: 5300 } as DOMRect)
-    const below = TestBed.createComponent(About)
-    below.detectChanges()
-    await below.whenStable()
-    expect(below.componentInstance['progress']()).toBe(0)
-    spy.mockRestore()
-  })
-
   it('should have 3 certifications', () => {
     expect(component['certifications'].length).toBe(3)
   })

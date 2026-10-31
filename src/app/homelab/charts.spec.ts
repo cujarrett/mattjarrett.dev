@@ -9,7 +9,6 @@ import {
   last,
   niceTicks,
   rateLabel,
-  scrollProgress,
   spanOf,
   sparkCoords,
   sparkPoints,
@@ -150,14 +149,5 @@ describe('homelab chart helpers', () => {
     expect(rateLabel(12_000_000)).toBe('12 MB/s')
     expect(rateLabel(1_500_000)).toBe('1.5 MB/s')
     expect(rateLabel(400_000)).toBe('400 KB/s')
-  })
-
-  it('scrollProgress eases from the chart peeking in to its middle above centre', () => {
-    expect(scrollProgress(900, 400, 1000)).toBe(0)
-    expect(scrollProgress(712.5, 400, 1000)).toBe(0.15625)
-    expect(scrollProgress(525, 400, 1000)).toBe(0.5)
-    expect(scrollProgress(150, 400, 1000)).toBe(1)
-    expect(scrollProgress(2000, 400, 1000)).toBe(0)
-    expect(scrollProgress(-500, 400, 1000)).toBe(1)
   })
 })

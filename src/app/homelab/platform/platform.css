@@ -174,8 +174,13 @@ app-kind-icon {
   color: var(--hl-muted);
 }
 
-.done app-kind-icon {
-  color: var(--c);
+/* The build replays as --scroll rises. Each step lights up once the replay passes its time. */
+.step {
+  --done: clamp(0, (var(--scroll) * var(--total) - var(--s)) * 1000 + 1, 1);
+}
+
+.step app-kind-icon {
+  color: color-mix(in srgb, var(--c) calc(var(--done) * 100%), var(--hl-muted));
 }
 
 /* Stretches to the height of the resource list beside it. */
@@ -209,18 +214,14 @@ app-kind-icon {
 
 .nm,
 .t {
-  color: var(--hl-muted);
+  color: color-mix(in srgb, var(--hl-ink) calc(var(--done) * 100%), var(--hl-muted));
   font-variant-numeric: tabular-nums;
 }
 
-.done .nm,
-.done .t {
-  color: var(--hl-ink);
-}
-
-.done .t::after {
+.t::after {
   content: ' ✓';
   color: var(--hl-good);
+  opacity: var(--done);
 }
 
 .t {
@@ -229,12 +230,18 @@ app-kind-icon {
 
 .lane {
   height: 22px;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
+/* Slides in rather than widening, so the browser skips layout on every frame. */
 .bar {
   height: 100%;
   min-width: 3px;
   border-radius: 4px;
+  transform: translateX(
+    calc((min(var(--scroll) * var(--total), var(--shown)) / var(--shown) - 1) * 100%)
+  );
 }
 
 .pi {
@@ -265,19 +272,11 @@ app-kind-icon {
   position: absolute;
   top: 0;
   bottom: 0;
+  left: calc(var(--scroll) * var(--total) / var(--max) * 100%);
   width: 1px;
   background: rgba(255, 255, 255, 0.5);
-}
-
-/* Glides over the gap between mouse wheel steps. */
-@media (prefers-reduced-motion: no-preference) {
-  .bar {
-    transition: width 200ms ease-out;
-  }
-
-  .now {
-    transition: left 200ms ease-out;
-  }
+  /* Shown only mid-replay. */
+  opacity: calc(min(var(--scroll), 1 - var(--scroll)) * 1000);
 }
 
 .axis {

@@ -11,7 +11,8 @@
   color: var(--about-ink);
   padding-top: 100px;
   padding-bottom: 80px;
-  overflow: auto;
+  /* clip, not auto: a scroll box here would freeze the skill bars' scroll timeline. */
+  overflow: clip;
 }
 
 .section-header {
@@ -39,7 +40,7 @@
 
 .about-columns {
   display: flex;
-  overflow: auto;
+  overflow: clip;
   max-width: var(--max-content-width);
   margin-left: auto;
   margin-right: auto;
@@ -122,15 +123,8 @@
 
 .fill {
   height: 100%;
-  width: 0;
   border-radius: 999px;
-}
-
-/* Glides over the gap between mouse wheel steps. */
-@media (prefers-reduced-motion: no-preference) {
-  .fill {
-    transition: width 200ms ease-out;
-  }
+  transform: translateX(calc((var(--scroll) - 1) * 100%));
 }
 
 /* More info links */

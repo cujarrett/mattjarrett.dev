@@ -42,7 +42,7 @@
           }
         </div>
       </div>
-      <div id="skills-graph">
+      <div id="skills-graph" class="scroll-fill">
         @for (skill of skills; track skill.name) {
           <div class="skill">
             <span class="skill-name">{{ skill.name }}</span>
@@ -50,7 +50,7 @@
               <div
                 class="fill"
                 [style.background]="skill.color"
-                [style.width]="skill.percent * progress() + '%'"
+                [style.width.%]="skill.percent"
               ></div>
             </div>
           </div>

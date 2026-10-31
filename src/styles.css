@@ -129,3 +129,35 @@ section {
   text-shadow: none;
   background: var(--theme-dark);
 }
+
+/* How far a chart has scrolled into view, 0 to 1. Charts fill as it rises.
+   - Registered: so it can animate as a number.
+   - Starts at 1: browsers without scroll timelines, and reduced motion, show full charts. */
+@property --scroll {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+@keyframes scroll-fill {
+  from {
+    --scroll: 0;
+  }
+  to {
+    --scroll: 1;
+  }
+}
+
+/* The browser drives this from the scroll position, so it never lags a frame.
+   - Start: the chart's top edge comes on screen.
+   - End: the chart's middle sits about a third of the way down the screen. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .scroll-fill {
+      animation: scroll-fill linear both;
+      animation-timing-function: ease-in-out;
+      animation-timeline: view();
+      animation-range: entry 0% cover 55%;
+    }
+  }
+}

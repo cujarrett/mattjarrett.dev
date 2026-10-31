@@ -1,16 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  signal,
-  inject,
-  PLATFORM_ID,
-  afterNextRender,
-  ElementRef,
-  DestroyRef,
-} from '@angular/core'
-import { isPlatformBrowser, DOCUMENT, NgOptimizedImage } from '@angular/common'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { NgOptimizedImage } from '@angular/common'
 import { Reveal } from '../shared/reveal'
-import { scrollProgress } from '../homelab/charts'
 
 interface Skill {
   name: string
@@ -26,14 +16,6 @@ interface Skill {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class About {
-  // How far the skill bars have scrolled up the screen, 0 to 1. The bars follow it both ways.
-  protected readonly progress = signal(0)
-
-  private readonly platformId = inject(PLATFORM_ID)
-  private readonly document = inject(DOCUMENT)
-  private readonly elementRef = inject(ElementRef)
-  private readonly destroyRef = inject(DestroyRef)
-
   protected readonly certifications = [
     {
       name: 'Certified Kubernetes Application Developer (CKAD)',
@@ -93,37 +75,4 @@ export class About {
     { name: 'Terraform', percent: 60, color: '#8bc34a' },
     { name: 'IoT', percent: 50, color: '#f9a825' },
   ]
-
-  constructor() {
-    afterNextRender(() => {
-      if (!isPlatformBrowser(this.platformId)) return
-      const win = this.document.defaultView
-      if (!win) return
-      if (win.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        this.progress.set(1)
-        return
-      }
-      const measure = () => {
-        const graph: Element | null = this.elementRef.nativeElement.querySelector('#skills-graph')
-        if (!graph) return
-        const box = graph.getBoundingClientRect()
-        this.progress.set(scrollProgress(box.top, box.height, win.innerHeight))
-      }
-      let queued = 0
-      const queue = () => {
-        queued ||= win.requestAnimationFrame(() => {
-          queued = 0
-          measure()
-        })
-      }
-      win.addEventListener('scroll', queue, { passive: true })
-      win.addEventListener('resize', queue)
-      this.destroyRef.onDestroy(() => {
-        win.removeEventListener('scroll', queue)
-        win.removeEventListener('resize', queue)
-        win.cancelAnimationFrame(queued)
-      })
-      measure()
-    })
-  }
 }

@@ -64,15 +64,18 @@
         }
 
         @if (build(); as b) {
-          <div class="race">
+          <div class="race scroll-fill" [style.--total]="b.total" [style.--max]="b.max">
             <div class="steps" [class.fill]="b.steps.length >= 6">
-              @if (b.playing) {
-                <div class="overlay" aria-hidden="true">
-                  <i class="now" [style.left.%]="b.now"></i>
-                </div>
-              }
+              <div class="overlay" aria-hidden="true">
+                <i class="now"></i>
+              </div>
               @for (s of b.steps; track s.name) {
-                <div class="step" [class]="s.where" [class.done]="s.done">
+                <div
+                  class="step"
+                  [class]="s.where"
+                  [style.--s]="s.seconds"
+                  [style.--shown]="s.shown"
+                >
                   <span class="nm">
                     @if (s.kind) {
                       <app-kind-icon [kind]="s.kind" />
