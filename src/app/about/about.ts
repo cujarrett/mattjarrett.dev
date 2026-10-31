@@ -60,7 +60,7 @@ export class About {
     },
     {
       title: 'Sr Software Engineer - State Farm',
-      period: '2020 to 2026',
+      period: '2019 to 2026',
       description:
         'Led cloud native and DevOps change for the telematics platform across public cloud, mobile, and IoT, working on culture as much as code.',
     },
