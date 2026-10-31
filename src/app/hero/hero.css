@@ -7,9 +7,14 @@ header {
   height: 100vh;
   width: 100%;
   min-height: 100%;
+  /* The photo's edge red, so the area past a capped photo blends in */
+  background-color: #e3130e;
   background-image: url('/header.jpg');
   background-position: center;
-  background-size: cover;
+  background-repeat: no-repeat;
+  /* Cover, but never wider than 1920px.
+     The photo is soft, so 1920px is half its pixels at 1x and all of them at 2x. */
+  background-size: min(max(100%, 177.78vh), 1920px) auto;
   text-align: right;
   color: white;
 }
@@ -88,6 +93,13 @@ header {
 @media (max-width: 1026px) {
   header {
     background-position: 73%;
+  }
+}
+
+/* The cap applies here. Pin the photo to the bottom so the shirt meets the next section. */
+@media (min-width: 1921px), (min-height: 1081px) {
+  header {
+    background-position-y: bottom;
   }
 }
 
