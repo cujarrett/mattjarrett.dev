@@ -11,6 +11,21 @@ function shuffle<T>(array: T[]): T[] {
   return arr
 }
 
+// These two look alike, so they never touch. The grid is 1, 2 or 3 wide.
+// Cards 1, 2 or 3 apart share a side in one of those, so 4 apart is the closest that never does.
+const KEEP_APART = ['Launchpad', 'temporal-controller']
+
+export function apart(projects: { title: string }[]): boolean {
+  const [i, j] = KEEP_APART.map((title) => projects.findIndex((p) => p.title === title))
+  return Math.abs(i - j) >= 4
+}
+
+function shuffleApart<T extends { title: string }>(array: T[]): T[] {
+  let arr = shuffle(array)
+  while (!apart(arr)) arr = shuffle(array)
+  return arr
+}
+
 @Component({
   selector: 'app-portfolio',
   imports: [NgOptimizedImage, Reveal],
@@ -19,7 +34,7 @@ function shuffle<T>(array: T[]): T[] {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Portfolio {
-  protected readonly projects = shuffle([
+  protected readonly projects = shuffleApart([
     {
       title: 'js-pollock',
       description: 'Can computers make art? My daughter asked, so we found out',

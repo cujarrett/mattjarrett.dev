@@ -1,6 +1,6 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing'
 import { IMAGE_LOADER, ImageLoaderConfig } from '@angular/common'
-import { Portfolio } from './portfolio'
+import { Portfolio, apart } from './portfolio'
 
 describe('Portfolio', () => {
   let fixture: ComponentFixture<Portfolio>
@@ -33,5 +33,12 @@ describe('Portfolio', () => {
   it('should render a card for each project', () => {
     const cards = fixture.nativeElement.querySelectorAll('.portfolio-item')
     expect(cards.length).toBe(component['projects'].length)
+  })
+
+  it('never puts Launchpad and temporal-controller side by side', () => {
+    for (let n = 0; n < 50; n++) {
+      const projects = TestBed.createComponent(Portfolio).componentInstance['projects']
+      expect(apart(projects)).toBe(true)
+    }
   })
 })
