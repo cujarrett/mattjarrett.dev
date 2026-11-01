@@ -33,6 +33,7 @@ const TYPES: Record<string, { name: string; dir: string }> = {
   Subscription: { name: 'Subscriptions', dir: 'subscription' },
   Sql: { name: 'SQL databases', dir: 'sql' },
   ObjectStorage: { name: 'Storage buckets', dir: 'object-storage' },
+  Workflow: { name: 'Workflow spaces', dir: 'workflow' },
 }
 
 // Both have an in-cluster variant and an AWS one, chosen by the developer.

@@ -14,6 +14,7 @@ const ICONS: Record<string, string> = {
   GraphApi: 'graphql',
   FederatedGraph: 'network',
   ManagedSecret: 'key-round',
+  Workflow: 'workflow',
   IAMRole: 'key-round',
 }
 
