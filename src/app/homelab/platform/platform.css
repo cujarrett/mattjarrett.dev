@@ -125,6 +125,20 @@
   color: var(--hl-ink-2);
 }
 
+/* One time per demo, side by side, each named under its number. */
+.nums {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 48px;
+}
+
+.nums em {
+  display: block;
+  font-size: 13px;
+  font-style: normal;
+  color: var(--hl-muted);
+}
+
 /* What the time bought, so the number is not read as just a deploy. */
 .big .claim {
   max-width: 56ch;
@@ -184,11 +198,21 @@ app-kind-icon {
 }
 
 /* Stretches to the height of the resource list beside it. */
-.race {
-  flex: 1;
+.race,
+.race-foot {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.race {
+  flex: 1;
+}
+
+/* Follows the scroll both ways, and is full by the time the chart's top is a third of the
+   way up the screen, well before any bar scrolls away. */
+.race.scroll-fill {
+  animation-range: entry 0% contain 50%;
 }
 
 .steps {
@@ -250,6 +274,10 @@ app-kind-icon {
 
 .aws {
   --c: var(--lp-aws);
+}
+
+.entra {
+  --c: #38bdf8;
 }
 
 .app {
@@ -329,5 +357,61 @@ app-kind-icon {
 
   .overlay {
     inset: -6px 52px -6px 140px;
+  }
+}
+
+/* Wide: fits a 14" laptop screen. Shared rows line up the numbers and the lists. */
+@media (min-width: 901px) {
+  .platform {
+    padding: 32px 0 28px;
+  }
+
+  .section-header {
+    margin-bottom: 20px;
+  }
+
+  .section-header hr {
+    margin: 10px auto 8px;
+  }
+
+  .cols {
+    grid-template-rows: auto 1fr auto;
+    row-gap: 14px;
+  }
+
+  .col {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+
+  .big b {
+    font-size: clamp(48px, 6vw, 72px);
+  }
+
+  .big span {
+    font-size: 14px;
+  }
+
+  .types {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .types a {
+    padding: 3px 0;
+  }
+
+  .steps {
+    gap: 4px;
+  }
+
+  .lane {
+    height: 16px;
+  }
+
+  .invite {
+    margin-top: 24px;
   }
 }

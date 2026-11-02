@@ -16,6 +16,7 @@ const ICONS: Record<string, string> = {
   ManagedSecret: 'key-round',
   Workflow: 'workflow',
   IAMRole: 'key-round',
+  EntraApp: 'id-card',
 }
 
 // The SVG is a mask over currentColor, so each icon takes the colour of the text around it.

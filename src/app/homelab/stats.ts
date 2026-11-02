@@ -28,7 +28,7 @@ export interface ClusterStats {
 export interface BuildStep {
   name: string
   kind?: string
-  where: 'pi' | 'aws' | 'app'
+  where: 'pi' | 'aws' | 'entra' | 'app'
   seconds: number
 }
 
@@ -37,6 +37,7 @@ export interface PlatformStats {
   workspaces: {
     count: number
     build: { totalSeconds: number; steps: BuildStep[] }
+    workflowBuild?: { totalSeconds: number; steps: BuildStep[] }
   } | null
 }
 

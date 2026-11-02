@@ -35,8 +35,8 @@
             <a [href]="t.href" target="_blank" rel="noopener noreferrer">
               <span
                 ><app-kind-icon [kind]="t.type" />{{ t.name }}
-                @if (t.variants) {
-                  <small>in cluster or AWS</small>
+                @if (t.tech) {
+                  <small>{{ t.tech }}</small>
                 }</span
               ><b>{{ t.count }}</b>
             </a>
@@ -47,7 +47,18 @@
       <div class="col">
         @if (data()?.workspaces; as ws) {
           <div class="big">
-            <b>{{ ws.build.totalSeconds | number: '1.0-0' }}<small>seconds</small></b>
+            <div class="nums">
+              <div>
+                <b>{{ ws.build.totalSeconds | number: '1.0-0' }}<small>seconds</small></b>
+                <em>App with real data</em>
+              </div>
+              @if (ws.workflowBuild; as flow) {
+                <div>
+                  <b>{{ flow.totalSeconds | number: '1.0-0' }}<small>seconds</small></b>
+                  <em>Durable workflow</em>
+                </div>
+              }
+            </div>
             <span class="claim"
               ><strong>Time, request to ready.</strong> Auth and connection details included.</span
             >
@@ -65,7 +76,7 @@
 
         @if (build(); as b) {
           <div class="race scroll-fill" [style.--total]="b.total" [style.--max]="b.max">
-            <div class="steps" [class.fill]="b.steps.length >= 6">
+            <div class="steps fill">
               <div class="overlay" aria-hidden="true">
                 <i class="now"></i>
               </div>
@@ -89,6 +100,9 @@
                 </div>
               }
             </div>
+          </div>
+          <!-- Outside the replay, so the bars alone match the list beside them in height. -->
+          <div class="race-foot">
             <div class="axis">
               <span></span>
               <div>
@@ -99,8 +113,12 @@
               <span></span>
             </div>
             <div class="key">
-              <span class="pi">In Cluster</span><span class="aws">In AWS</span
-              ><span class="app">App serving traffic</span>
+              <span class="pi">In Cluster</span>
+              <span class="aws">In AWS</span>
+              @if (b.hasEntra) {
+                <span class="entra">In Entra</span>
+              }
+              <span class="app">App serving traffic</span>
             </div>
           </div>
         }
