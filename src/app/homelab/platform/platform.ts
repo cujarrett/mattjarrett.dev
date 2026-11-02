@@ -87,7 +87,13 @@ export class Platform {
     const extra = (flow?.steps ?? [])
       .filter((s) => !names.has(s.name))
       .map((s) => (s.kind === 'Workflow' ? { ...s, seconds: flow!.totalSeconds } : s))
-    const steps = [...ws.build.steps, ...extra].sort((a, b) => a.seconds - b.seconds)
+    // The API and web app resources are ready in seconds. Their "running" rows are the
+    // time that counts, so only those show.
+    const resourceOnly = (s: { kind?: string; where: string }) =>
+      (s.kind === 'Api' || s.kind === 'Spa') && s.where !== 'app'
+    const steps = [...ws.build.steps, ...extra]
+      .filter((s) => !resourceOnly(s))
+      .sort((a, b) => a.seconds - b.seconds)
     // The replay runs until the slowest row, which can be the workflow.
     const total = Math.max(...steps.map((s) => s.seconds))
     // Scaled to the build itself, so the slowest step fills the row.

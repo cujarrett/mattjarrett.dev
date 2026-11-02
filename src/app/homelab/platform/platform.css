@@ -125,20 +125,6 @@
   color: var(--hl-ink-2);
 }
 
-/* One time per demo, side by side, each named under its number. */
-.nums {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 48px;
-}
-
-.nums em {
-  display: block;
-  font-size: 13px;
-  font-style: normal;
-  color: var(--hl-muted);
-}
-
 /* What the time bought, so the number is not read as just a deploy. */
 .big .claim {
   max-width: 56ch;

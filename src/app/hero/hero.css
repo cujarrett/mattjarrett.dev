@@ -17,6 +17,20 @@ header {
   background-size: min(max(100%, 177.78vh), 1920px) auto;
   text-align: right;
   color: white;
+  animation: hero-in 0.6s ease-out both;
+}
+
+/* A quick fade from the page colour, so the photo arrives softly. */
+@keyframes hero-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header {
+    animation: none;
+  }
 }
 
 .header-content {

@@ -47,21 +47,13 @@
       <div class="col">
         @if (data()?.workspaces; as ws) {
           <div class="big">
-            <div class="nums">
-              <div>
-                <b>{{ ws.build.totalSeconds | number: '1.0-0' }}<small>seconds</small></b>
-                <em>App with real data</em>
-              </div>
-              @if (ws.workflowBuild; as flow) {
-                <div>
-                  <b>{{ flow.totalSeconds | number: '1.0-0' }}<small>seconds</small></b>
-                  <em>Durable workflow</em>
-                </div>
-              }
-            </div>
+            <b>{{ ws.build.totalSeconds | number: '1.0-0' }}<small>seconds</small></b>
             <span class="claim"
-              ><strong>Time, request to ready.</strong> Auth and connection details included.</span
-            >
+              ><strong>Request to ready</strong> for an app with real data, auth included.
+              @if (ws.workflowBuild; as flow) {
+                A durable workflow takes {{ flow.totalSeconds | number: '1.0-0' }} s.
+              }
+            </span>
           </div>
         } @else {
           <div class="big">
