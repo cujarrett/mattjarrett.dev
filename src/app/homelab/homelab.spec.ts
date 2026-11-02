@@ -154,7 +154,7 @@ describe('Platform', () => {
     expect(el.textContent).toContain('GraphQL services')
     expect(el.textContent).toContain('SQL databases')
     expect(el.querySelectorAll('.big b')[1]?.textContent).toContain('41')
-    expect(el.textContent).toContain('Auth and connection details included.')
+    expect(el.textContent).toContain('Request to ready for an app with real data, auth included.')
     // The slowest step is 41 s on a 44 s axis.
     const step = el.querySelector('.step:last-child') as HTMLElement
     expect(step.style.getPropertyValue('--shown')).toBe('41')
