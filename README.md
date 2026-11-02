@@ -2,58 +2,25 @@
 
 # [https://mattjarrett.dev](https://mattjarrett.dev)
 
-### Development server
-
-To start a local development server, run:
+## Run it locally
 
 ```bash
-npm run start
+npm install
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open http://localhost:4200. The page reloads when a file changes.
 
-### Code scaffolding
+The homelab section reads live numbers from [homelab-stats](https://github.com/cujarrett/homelab-stats). Pick where they come from:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+| Command | Stats from |
+|---|---|
+| `npm start` | The live site, `mattjarrett.dev` |
+| `npm run start:local` | homelab-stats from source on `localhost:18080`. Start it first with `just dev` in that repo |
+
+## Checks
 
 ```bash
-ng generate component component-name
+npm run ci      # format check, lint and unit tests
+npm run build   # production build in dist/
 ```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-### Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-### Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-### Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-### Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
