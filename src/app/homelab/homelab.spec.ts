@@ -148,13 +148,15 @@ describe('Cluster', () => {
 })
 
 describe('Platform', () => {
-  it('shows the running total, the replayed build time and each step sized for the replay', async () => {
+  it('shows the running total, one big number only and each step sized for the replay', async () => {
     const el = await render(Platform)
     expect(el.querySelector('.big b')?.textContent).toBe('31')
     expect(el.textContent).toContain('GraphQL services')
     expect(el.textContent).toContain('SQL databases')
-    expect(el.querySelectorAll('.big b')[1]?.textContent).toContain('41')
-    expect(el.textContent).toContain('Request to ready for an app with real data, auth included.')
+    expect(el.querySelectorAll('.big b').length).toBe(1)
+    expect(el.querySelector('.chart-title')?.textContent).toContain(
+      'Request to ready for an app with real data, auth included.',
+    )
     // The slowest step is 41 s on a 44 s axis.
     const step = el.querySelector('.step:last-child') as HTMLElement
     expect(step.style.getPropertyValue('--shown')).toBe('41')
