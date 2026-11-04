@@ -9,7 +9,7 @@ import {
   inject,
   signal,
 } from '@angular/core'
-import { DecimalPipe, isPlatformBrowser } from '@angular/common'
+import { isPlatformBrowser } from '@angular/common'
 import { PlatformStats, Stats } from '../stats'
 import { Reveal } from '../../shared/reveal'
 import { KindIcon } from '../kind-icon'
@@ -34,7 +34,7 @@ const TYPES: Record<string, { name: string; dir: string; tech?: string }> = {
   Subscription: { name: 'Subscriptions', dir: 'subscription', tech: 'NATS' },
   Sql: { name: 'SQL databases', dir: 'sql', tech: 'Postgres or RDS' },
   ObjectStorage: { name: 'Storage buckets', dir: 'object-storage', tech: 'S3' },
-  Workflow: { name: 'Durable workflows', dir: 'workflow', tech: 'Temporal' },
+  WorkflowSpace: { name: 'Durable workflows', dir: 'workflow-space', tech: 'Temporal' },
 }
 
 // Both have an in-cluster variant and an AWS one, chosen by the developer.
@@ -42,7 +42,7 @@ const HAS_VARIANTS = new Set(['Cache', 'Sql'])
 
 @Component({
   selector: 'app-platform',
-  imports: [DecimalPipe, Reveal, KindIcon, LiveSource, SandboxCta, LaunchpadMark],
+  imports: [Reveal, KindIcon, LiveSource, SandboxCta, LaunchpadMark],
   templateUrl: './platform.html',
   styleUrl: './platform.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -78,7 +78,7 @@ export class Platform {
   protected readonly build = computed(() => {
     const ws = this.data()?.workspaces
     if (!ws) return null
-    // One list of rollout times per kind. The Workflow build adds the kinds the main
+    // One list of rollout times per kind. The WorkflowSpace build adds the kinds the main
     // build lacks, and the main build keeps its own times.
     // A workflow is usable once its servers have signed in, so its row shows that whole
     // build, the time a guest waits, not the moment its namespace exists.
@@ -86,7 +86,7 @@ export class Platform {
     const names = new Set(ws.build.steps.map((s) => s.name))
     const extra = (flow?.steps ?? [])
       .filter((s) => !names.has(s.name))
-      .map((s) => (s.kind === 'Workflow' ? { ...s, seconds: flow!.totalSeconds } : s))
+      .map((s) => (s.kind === 'WorkflowSpace' ? { ...s, seconds: flow!.totalSeconds } : s))
     // The API and web app resources are ready in seconds. Their "running" rows are the
     // time that counts, so only those show.
     const resourceOnly = (s: { kind?: string; where: string }) =>

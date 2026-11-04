@@ -45,26 +45,14 @@
       </div>
 
       <div class="col">
-        @if (data()?.workspaces; as ws) {
-          <div class="big">
-            <b>{{ ws.build.totalSeconds | number: '1.0-0' }}<small>seconds</small></b>
-            <span class="claim"
-              ><strong>Request to ready</strong> for an app with real data, auth included.
-              @if (ws.workflowBuild; as flow) {
-                A durable workflow takes {{ flow.totalSeconds | number: '1.0-0' }} s.
-              }
-            </span>
-          </div>
-        } @else {
-          <div class="big">
-            <b>–</b>
-            <span class="claim">{{
-              failed()
-                ? 'Live stats are unavailable right now'
-                : 'Time, request to ready. Auth and connection details included.'
-            }}</span>
-          </div>
-        }
+        <!-- A plain title, so the chart is not read as a second live counter. -->
+        <p class="chart-title">
+          @if (failed() && !build()) {
+            Live stats are unavailable right now.
+          } @else {
+            <strong>Request to ready</strong> for an app with real data, auth included.
+          }
+        </p>
 
         @if (build(); as b) {
           <div class="race scroll-fill" [style.--total]="b.total" [style.--max]="b.max">

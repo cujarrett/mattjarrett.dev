@@ -125,13 +125,17 @@
   color: var(--hl-ink-2);
 }
 
-/* What the time bought, so the number is not read as just a deploy. */
-.big .claim {
+/* Sits on the shared first row, just above the chart. */
+.chart-title {
+  align-self: end;
+  margin: 0;
   max-width: 56ch;
+  font-size: 15px;
+  color: var(--hl-ink-2);
   text-wrap: balance;
 }
 
-.claim strong {
+.chart-title strong {
   color: var(--hl-ink);
   font-weight: 600;
 }
