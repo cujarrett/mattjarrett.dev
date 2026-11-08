@@ -72,6 +72,12 @@ export class Portfolio {
       img: 'portfolio/gotemplate-yaml.png',
     },
     {
+      title: 'Between Stars',
+      description: 'A purple-black VS Code theme with a green glow.',
+      url: 'https://marketplace.visualstudio.com/items?itemName=cujarrett.between-stars',
+      img: 'portfolio/beyond-stars.png',
+    },
+    {
       title: "I Pub Sub'd my Sump Pump",
       description: 'Power of platform engineering',
       url: 'https://blog.mattjarrett.dev/i-pub-subd-my-sump-pump/',
