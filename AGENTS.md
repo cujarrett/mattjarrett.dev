@@ -1,18 +1,18 @@
 # mattjarrett.dev
 
-Personal portfolio site built with Angular 20+ (signals, standalone components, OnPush), containerized with Docker (nginx), and deployed to a self-hosted Kubernetes cluster (k3s on Raspberry Pi). The app is a static SPA served by nginx. The homelab section reads live numbers from [homelab-stats](https://github.com/cujarrett/homelab-stats), which nginx proxies at `/api/stats/`.
+Personal portfolio site built with Angular (signals, standalone components, OnPush). It ships as a static SPA in an nginx image and runs on a self-hosted Kubernetes cluster (k3s on Raspberry Pi). The homelab section reads live numbers from [homelab-stats](https://github.com/cujarrett/homelab-stats), which nginx proxies at `/api/stats/`.
 
 - **Namespace**: `mattjarrett-dev`
-- **nginx config**: `nginx.conf` at repo root, mounted into the container
+- **nginx config**: the homelab `Spa` composition generates it. This repo ships none.
 - **Angular instructions**: See [.github/instructions/angular.instructions.md](.github/instructions/angular.instructions.md)
 
 ### Key Files
 
 | File | Purpose |
 |------|---------|
-| `nginx.conf` | nginx server config - routing, security headers, scanner blocks |
-| `Dockerfile` | Multi-stage build: Angular CLI → nginx |
+| `Dockerfile` | Multi-stage build: Angular CLI, then the `base-spa` nginx image |
 | `src/app/` | Angular components (hero, about, portfolio, homelab, contact, nav) |
+| `proxy.live.json`, `proxy.local.json` | Dev-server proxies for `/api/stats/`. `npm start` uses the live one, `npm run start:local` the local one |
 
 ## Rules
 
