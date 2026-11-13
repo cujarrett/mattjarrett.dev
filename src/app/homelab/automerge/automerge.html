@@ -6,7 +6,6 @@
           >Destroy All Toil<span aria-hidden="true"> ↗</span></a
         >
       </h1>
-      <hr />
       <p class="subline">
         Stop training engineers to speedrun PRs. We need them sharp where it matters.
       </p>
@@ -40,10 +39,10 @@
               }
             </div>
             <div class="plot" [class.armed]="armed()" [class.grow]="grow()">
-              @for (d of c.days; track $index) {
-                <div class="day" [title]="d.title">
-                  <i class="auto" [style.height.%]="d.auto"></i>
-                  <i class="hand" [style.height.%]="d.hand"></i>
+              @for (w of c.weeks; track $index) {
+                <div class="week" [title]="w.title">
+                  <i class="auto" [style.height.%]="w.auto"></i>
+                  <i class="hand" [style.height.%]="w.hand"></i>
                 </div>
               }
               <div class="live" [style.left.%]="c.liveLeft"><span>Automerge on</span></div>

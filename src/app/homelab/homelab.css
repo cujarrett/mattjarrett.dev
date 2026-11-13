@@ -31,17 +31,14 @@
 
 .section-heading a {
   color: var(--hl-ink);
+  /* An underline marks the link without relying on colour (WCAG 1.4.1). */
+  text-decoration: underline 3px #d8b4fe;
+  text-underline-offset: 0.3em;
 }
 
 .section-heading a:hover {
+  text-decoration-thickness: 5px;
   color: #d8b4fe;
-}
-
-hr.light {
-  border: none;
-  border-top: 3px solid #b45cff;
-  max-width: 50px;
-  margin: 20px auto 0;
 }
 
 .photo {

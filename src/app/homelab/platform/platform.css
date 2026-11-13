@@ -53,6 +53,9 @@
 .section-heading a {
   --mark-size: 1.4em;
   color: var(--hl-ink);
+  /* An underline marks the link without relying on colour (WCAG 1.4.1). */
+  text-decoration: underline 3px var(--lp-accent-soft);
+  text-underline-offset: 0.3em;
 }
 
 /* Inline with the words, so a wrapped heading keeps the mark at its start. */
@@ -62,17 +65,12 @@
 }
 
 .section-heading a:hover {
+  text-decoration-thickness: 5px;
   color: var(--lp-accent-soft);
 }
 
-.section-header hr {
-  border: none;
-  border-top: 3px solid var(--lp-accent);
-  max-width: 50px;
-  margin: 16px auto 12px;
-}
-
 .subline {
+  margin: 18px 0 0;
   font-family: var(--font-serif);
   font-size: 15px;
   color: var(--hl-ink-2);
@@ -358,10 +356,6 @@ app-kind-icon {
 
   .section-header {
     margin-bottom: 20px;
-  }
-
-  .section-header hr {
-    margin: 10px auto 8px;
   }
 
   .cols {

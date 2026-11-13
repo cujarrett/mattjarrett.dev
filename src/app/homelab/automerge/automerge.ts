@@ -51,25 +51,42 @@ export class Automerge {
   protected readonly chart = computed(() => {
     const d = this.data()
     if (!d || d.days.length === 0) return null
-    const n = d.days.length
-    const peak = Math.max(...d.days.map((day) => day.automatic + day.byHand), 1)
-    // Four gridline steps, each a round number, sized to the busiest day.
+    // Weekly bars stay wide as the history grows.
+    // Weeks start on the automerge day, so the "on" line sits between two bars.
+    const live = Math.max(
+      d.days.findIndex((day) => day.date >= d.since),
+      0,
+    )
+    const firstStart = live % 7 === 0 ? 0 : (live % 7) - 7
+    const weeks: { date: string; automatic: number; byHand: number }[] = []
+    for (let start = firstStart; start < d.days.length; start += 7) {
+      const days = d.days.slice(Math.max(start, 0), start + 7)
+      weeks.push({
+        date: days[0].date,
+        automatic: days.reduce((sum, day) => sum + day.automatic, 0),
+        byHand: days.reduce((sum, day) => sum + day.byHand, 0),
+      })
+    }
+    const n = weeks.length
+    const liveWeek = (live - firstStart) / 7
+    const peak = Math.max(...weeks.map((w) => w.automatic + w.byHand), 1)
+    // Four gridline steps, each a round number, sized to the busiest week.
     const raw = peak / 4
-    const step = [1, 2, 3, 4, 5, 6, 8, 10, 15, 20, 25, 50].find((s) => s >= raw) ?? Math.ceil(raw)
+    const step =
+      [1, 2, 3, 4, 5, 6, 8, 10, 15, 20, 25, 50, 75, 100].find((s) => s >= raw) ?? Math.ceil(raw)
     const max = step * 4
-    const live = d.days.findIndex((day) => day.date >= d.since)
     return {
       ticks: [max, (max * 3) / 4, max / 2, max / 4, 0],
-      liveLeft: (Math.max(live, 0) / n) * 100,
-      labels: d.days
-        .map((day, i) => ({ text: shortDate(day.date), left: (i / n) * 100 }))
-        .filter((_, i) => i % 14 === 0),
-      days: d.days.map((day) => ({
-        auto: (day.automatic / max) * 100,
-        hand: (day.byHand / max) * 100,
-        title: `${shortDate(day.date)}: ${day.automatic} automatic, ${day.byHand} by hand`,
+      liveLeft: (liveWeek / n) * 100,
+      labels: weeks
+        .map((w, i) => ({ text: shortDate(w.date), left: (i / n) * 100 }))
+        .filter((_, i) => i % 2 === 0),
+      weeks: weeks.map((w) => ({
+        auto: (w.automatic / max) * 100,
+        hand: (w.byHand / max) * 100,
+        title: `Week of ${shortDate(w.date)}: ${w.automatic} automatic, ${w.byHand} by hand`,
       })),
-      summary: `Dependency updates merged per day from ${shortDate(d.days[0].date)}. Automerge went live on ${shortDate(d.since)}.`,
+      summary: `Dependency updates merged per week from ${shortDate(weeks[0].date)}. Automerge went live on ${shortDate(d.since)}.`,
     }
   })
 
