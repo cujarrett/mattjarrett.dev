@@ -10,7 +10,7 @@ Personal portfolio site built with Angular (signals, standalone components, OnPu
 
 | File | Purpose |
 |------|---------|
-| `Dockerfile` | Multi-stage build: Angular CLI, then the `base-spa` nginx image |
+| `Dockerfile` | Multi-stage build: Angular CLI, then the `base-nginx` image |
 | `src/app/` | Angular components (hero, about, portfolio, homelab, contact, nav) |
 | `proxy.live.json`, `proxy.local.json` | Dev-server proxies for `/api/stats/`. `npm start` uses the live one, `npm run start:local` the local one |
 
