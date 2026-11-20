@@ -10,6 +10,7 @@ const cluster: ClusterStats = {
   availability30d: 99.9918,
   lastPowerOutage: '2026-09-19',
   lastInternetOutage: null,
+  internetWatchedSince: '2026-07-20',
   nodes: { ready: 4, total: 4, cores: 16, memoryBytes: 42_366_386_176 },
   pods: 145,
   apps: { synced: 45, total: 45 },
@@ -110,7 +111,8 @@ describe('Cluster', () => {
     const el = await render(Cluster)
     const values = [...el.querySelectorAll('.stat .value')].map((v) => v.textContent?.trim())
     expect(values[0]).toBe('99.9918%')
-    expect(values[2]).toBe('90+days')
+    // No internet outage on record, so the count starts when the archive did.
+    expect(values[2]).toMatch(/^\d+\+days$/)
     expect(values[1]).toMatch(/^\d+days?$/)
   })
 

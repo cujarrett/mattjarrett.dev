@@ -7,6 +7,9 @@ export interface ClusterStats {
   availability30d: number | null
   lastPowerOutage: string | null
   lastInternetOutage: string | null
+  // Set only when no outage is on record: the first day the archive watched for one.
+  powerWatchedSince?: string | null
+  internetWatchedSince?: string | null
   nodes: { ready: number; total: number; cores: number; memoryBytes: number }
   pods: number
   apps: { synced: number; total: number }

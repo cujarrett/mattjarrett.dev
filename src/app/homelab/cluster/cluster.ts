@@ -48,24 +48,26 @@ export class Cluster {
   private readonly now = signal(Date.now())
   // Sample index under the pointer, shared by every chart so they scrub together.
   protected readonly cursor = signal<number | null>(null)
-  // Same thresholds as the homelab Grafana dashboards.
-  protected readonly limits: Limits = { warn: 70, crit: 85 }
+  // CPU and memory percent. Yellow from 80, red from 85.
+  protected readonly limits: Limits = { warn: 80, crit: 85 }
 
   protected readonly summary = computed(() => {
     const d = this.data()
     if (!d) return null
     const today = new Date(this.now())
     // The API reports outages to the day, so the streak counts whole days.
-    const streak = (date: string | null) => {
-      if (!date) return { value: '90+', unit: 'days' }
+    // With no outage on record, the streak is at least as long as the archive has watched.
+    const streak = (last: string | null, watchedSince?: string | null) => {
+      const date = last ?? watchedSince
+      if (!date) return { value: '–', unit: 'days' }
       const days = daysSince(date, today)
-      return { value: `${days}`, unit: days === 1 ? 'day' : 'days' }
+      return { value: last ? `${days}` : `${days}+`, unit: days === 1 ? 'day' : 'days' }
     }
     return {
       // Already truncated by the API, so a month never rounds up.
       availability: d.availability30d === null ? '–' : `${d.availability30d.toFixed(4)}%`,
-      power: streak(d.lastPowerOutage),
-      internet: streak(d.lastInternetOutage),
+      power: streak(d.lastPowerOutage, d.powerWatchedSince),
+      internet: streak(d.lastInternetOutage, d.internetWatchedSince),
       nodes: d.nodes,
       pods: d.pods,
       apps: d.apps,
