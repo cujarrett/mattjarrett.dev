@@ -84,6 +84,12 @@ export class Portfolio {
       img: 'portfolio/launchpad.png',
     },
     {
+      title: 'Jerks',
+      description: 'A live map of everyone trying to break into my homelab',
+      url: 'https://jerks.mattjarrett.dev',
+      img: 'portfolio/jerks.png',
+    },
+    {
       title: 'temporal-controller',
       description: 'Temporal namespaces as Kubernetes resources',
       url: 'https://github.com/cujarrett/temporal-controller',
