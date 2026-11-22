@@ -40,6 +40,9 @@ const TYPES: Record<string, { name: string; dir: string; tech?: string }> = {
 // Both have an in-cluster variant and an AWS one, chosen by the developer.
 const HAS_VARIANTS = new Set(['Cache', 'Sql'])
 
+// The chart drops any step slower than this.
+const MAX_SHOWN_SECONDS = 45
+
 @Component({
   selector: 'app-platform',
   imports: [Reveal, KindIcon, LiveSource, SandboxCta, LaunchpadMark],
@@ -91,10 +94,11 @@ export class Platform {
     // time that counts, so only those show.
     const resourceOnly = (s: { kind?: string; where: string }) =>
       (s.kind === 'Api' || s.kind === 'Spa') && s.where !== 'app'
+    // Slow rows (Entra app, durable workflow) would stretch the axis and dwarf the fast ones.
+    const tooSlow = (s: { seconds: number }) => s.seconds > MAX_SHOWN_SECONDS
     const steps = [...ws.build.steps, ...extra]
-      .filter((s) => !resourceOnly(s))
+      .filter((s) => !resourceOnly(s) && !tooSlow(s))
       .sort((a, b) => a.seconds - b.seconds)
-    // The replay runs until the slowest row, which can be the workflow.
     const total = Math.max(...steps.map((s) => s.seconds))
     // Scaled to the build itself, so the slowest step fills the row.
     const max = Math.max(4, Math.ceil(total / 4) * 4)
