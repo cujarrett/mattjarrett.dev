@@ -110,6 +110,15 @@ header {
   }
 }
 
+/* Phones show the right half of the face.
+   The face sits at the photo's centre, so the left edge goes there.
+   The photo is 177.78vh wide on a phone, so half is 88.89vh. */
+@media (max-width: 767px) {
+  header {
+    background-position-x: -88.89vh;
+  }
+}
+
 /* The cap applies here. Pin the photo to the bottom so the shirt meets the next section. */
 @media (min-width: 1921px), (min-height: 1081px) {
   header {
